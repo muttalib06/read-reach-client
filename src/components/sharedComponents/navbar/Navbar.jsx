@@ -15,7 +15,7 @@ const Navbar = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-15 text-yellow-500"
+            className="size-15 text-primary"
           >
             <path
               strokeLinecap="round"
@@ -24,7 +24,7 @@ const Navbar = () => {
             />
           </svg>
           <h2 className="text-3xl font-bold">
-            Read<span className="text-yellow-500">Reach</span>
+            Read<span className="text-primary">Reach</span>
           </h2>
         </div>
       </div>
@@ -33,7 +33,7 @@ const Navbar = () => {
       <div className="hidden lg:block">
         <ul className="flex items-center gap-4 font-semibold">
           <li>
-            <NavLink
+            <NavLink to="/"
               className={({ isActive }) => (isActive ? "text-primary" : "")}
             >
               Home
@@ -41,7 +41,7 @@ const Navbar = () => {
           </li>
           <li>
             <NavLink
-              className={({ isActive }) => (isActive ? "text-primary" : "")}
+              className={({ isActive }) => (isActive?"text-primary" : "")}
             >
               Books
             </NavLink>
