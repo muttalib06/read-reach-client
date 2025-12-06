@@ -1,17 +1,18 @@
-import React from 'react';
-import Navbar from '../components/sharedComponents/navbar/Navbar';
-import Footer from '../components/sharedComponents/footer/Footer';
+import React from "react";
+import Navbar from "../components/sharedComponents/navbar/Navbar";
+import Footer from "../components/sharedComponents/footer/Footer";
+import { Outlet } from "react-router";
 
 const MainLayout = () => {
-        return (
-                <div>
-                       <Navbar></Navbar>
-                        <h1 className='h-screen'>Main Layout</h1>
+  return (
+    <div>
+      <Navbar></Navbar>
 
-                        <Footer></Footer>
-                        
-                </div>
-        );
+      <Outlet></Outlet>
+
+      <Footer></Footer>
+    </div>
+  );
 };
 
 export default MainLayout;

@@ -41,6 +41,7 @@ const Navbar = () => {
           </li>
           <li>
             <NavLink
+            to="/books"
               className={({ isActive }) => (isActive?"text-primary" : "")}
             >
               Books
@@ -48,6 +49,7 @@ const Navbar = () => {
           </li>
           <li>
             <NavLink
+            to="/dashboard"
               className={({ isActive }) => (isActive ? "text-primary" : "")}
             >
               Dashboard
@@ -114,8 +116,8 @@ const Navbar = () => {
           <FaUser></FaUser>
         </div>
         <div className="flex items-center gap-3">
-          <NavLink className="font-semibold">Sign Up</NavLink>
-          <NavLink className="btn bg-primary font-semibold text-white">
+          <NavLink to="/signup" className="font-semibold">Sign Up</NavLink>
+          <NavLink to="/login" className="btn bg-primary font-semibold text-white">
             Login
           </NavLink>
         </div>
