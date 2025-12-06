@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
-import { FaEye } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import libraryImg from "../../assets/library-image-auth.jpg";
 import { NavLink } from "react-router";
 
 const SignupPage = () => {
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -93,12 +94,19 @@ const SignupPage = () => {
                   </label>
                   <div className="relative">
                     <input
-                      type="password"
+                      type={open ? "text" : "password"}
                       placeholder="Enter your password"
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-300 focus:bg-white transition-colors"
                     />
-                    <button className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
-                      <FaEye size={18} />
+                    <button
+                      onClick={() => setOpen(!open)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
+                    >
+                      {open ? (
+                        <FaEyeSlash size={18}></FaEyeSlash>
+                      ) : (
+                        <FaEye size={18} />
+                      )}
                     </button>
                   </div>
                 </div>

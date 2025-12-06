@@ -1,14 +1,16 @@
-import React, { useEffect } from "react";
-import {FaEye } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import libraryImg from "../../assets/library-image-auth.jpg";
 import { NavLink } from "react-router";
 
 export default function ModernLogin() {
 
-        useEffect(() => {
-                window.scrollTo(0,0)
-        },[])
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="min-h-screen  flex items-center justify-center py-5">
       <div className="relative w-full max-w-5xl">
@@ -40,7 +42,6 @@ export default function ModernLogin() {
             {/* Right Side - Login Form */}
             <div className="lg:w-1/2 rounded-2xl bg-white p-4 lg:p-8 flex items-center justify-center">
               <div className="w-full max-w-md">
-               
                 {/* Welcome Text */}
                 <div className="mb-8">
                   <h2 className="text-4xl font-serif text-gray-900 mb-2">
@@ -70,12 +71,19 @@ export default function ModernLogin() {
                   </label>
                   <div className="relative">
                     <input
-                      type="password"
+                      type={open ? "text" : "password"}
                       placeholder="Enter your password"
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-300 focus:bg-white transition-colors"
                     />
-                    <button className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
-                      <FaEye size={18} />
+                    <button
+                      onClick={() => setOpen(!open)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
+                    >
+                      {open ? (
+                        <FaEyeSlash size={18}></FaEyeSlash>
+                      ) : (
+                        <FaEye size={18} />
+                      )}
                     </button>
                   </div>
                 </div>
@@ -112,7 +120,7 @@ export default function ModernLogin() {
                 <p className="text-center text-sm text-gray-600">
                   Don't have an account?{" "}
                   <NavLink
-                  to="/signup"
+                    to="/signup"
                     href="#"
                     className="text-gray-900 font-medium hover:underline"
                   >
