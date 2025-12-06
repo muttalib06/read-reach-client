@@ -9,6 +9,10 @@ import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { NavLink } from "react-router";
+import { AiOutlineHome } from "react-icons/ai";
+import { IoBookOutline } from "react-icons/io5";
+import { MdOutlineDashboard } from "react-icons/md";
+import { FiUserPlus } from "react-icons/fi";
 import { IoMdLogIn } from "react-icons/io";
 
 const NavbarDropdown = () => {
@@ -30,36 +34,112 @@ const NavbarDropdown = () => {
         <motion.ul
           initial={wrapperVariants.closed}
           variants={wrapperVariants}
-          style={{ originY: "top", translateX: "-50%" }}
-          className="flex flex-col gap-2 p-2 rounded-lg bg-white shadow-xl absolute top-[120%] left-[50%] w-48 overflow-hidden space-y-3"
+          style={{ originY: "top" }}
+          className="flex flex-col gap-2 p-2 rounded-lg bg-white shadow-xl absolute top-[120%] right-0 w-48 overflow-hidden space-y-3"
         >
-          <NavLink to="/edit" onClick={() => setOpen(false)}>
-            Home
-          </NavLink>
+          <li className="flex justify-between items-center">
+            <NavLink
+              to="/"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2"
+            >
+                <AiOutlineHome className="text-xl" />
+                Home
+            </NavLink>
+            <div>
+              <label className="toggle text-base-content">
+                <input
+                  type="checkbox"
+                  value="synthwave"
+                  className="theme-controller"
+                />
 
-          <NavLink to="/duplicate" onClick={() => setOpen(false)}>
-            Books
-          </NavLink>
+                <svg
+                  aria-label="sun"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                >
+                  <g
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                    strokeWidth="2"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <circle cx="12" cy="12" r="4"></circle>
+                    <path d="M12 2v2"></path>
+                    <path d="M12 20v2"></path>
+                    <path d="m4.93 4.93 1.41 1.41"></path>
+                    <path d="m17.66 17.66 1.41 1.41"></path>
+                    <path d="M2 12h2"></path>
+                    <path d="M20 12h2"></path>
+                    <path d="m6.34 17.66-1.41 1.41"></path>
+                    <path d="m19.07 4.93-1.41 1.41"></path>
+                  </g>
+                </svg>
 
-          <NavLink to="/share" onClick={() => setOpen(false)}>
-            Dashboard
-          </NavLink>
+                <svg
+                  aria-label="moon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                >
+                  <g
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                    strokeWidth="2"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+                  </g>
+                </svg>
+              </label>
+            </div>
+          </li>
 
-          <NavLink
-            className="font-semibold"
-            to="/remove"
-            onClick={() => setOpen(false)}
-          >
-            Sign Up
-          </NavLink>
-          <NavLink
-            className="font-semibold flex items-center gap-2"
-            to="/remove"
-            onClick={() => setOpen(false)}
-          >
-            <IoMdLogIn  className="text-2xl"/>
-            Login
-          </NavLink>
+          <li>
+            <NavLink
+              to="/books"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2"
+            >
+              <IoBookOutline className="text-xl" />
+              Books
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/dashboard"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2"
+            >
+              <MdOutlineDashboard className="text-xl" />
+              Dashboard
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              className="font-semibold flex items-center gap-2"
+              to="/signup"
+              onClick={() => setOpen(false)}
+            >
+              <FiUserPlus className="text-xl" />
+              Sign Up
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              className="font-semibold flex items-center gap-2"
+              to="/login"
+              onClick={() => setOpen(false)}
+            >
+              <IoMdLogIn className="text-2xl" />
+              Login
+            </NavLink>
+          </li>
         </motion.ul>
       </motion.div>
     </div>
