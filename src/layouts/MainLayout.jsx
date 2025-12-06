@@ -1,10 +1,10 @@
 import React from 'react';
-import Navbar from '../components/sharedComponents/Navbar';
+import Navbar from '../components/sharedComponents/navbar/Navbar';
 
 const MainLayout = () => {
         return (
                 <div>
-                        <Navbar></Navbar>
+                       <Navbar></Navbar>
                         <h1>Main Layout</h1>
                         
                 </div>

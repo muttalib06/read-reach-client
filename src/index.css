@@ -1,8 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+
 @import "tailwindcss";
 @plugin "daisyui";
 
-@import url("https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  --color-primary: #1e1e1e;
+  --color-secondary: #f7b900;
+}
 
 * {
   font-family: "Work Sans", sans-serif;
+  letter-spacing: 1px;
 }
