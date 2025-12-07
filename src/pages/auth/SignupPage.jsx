@@ -3,12 +3,115 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import libraryImg from "../../assets/library-image-auth.jpg";
 import { NavLink } from "react-router";
+import useAuth from "../../hooks/useAuth";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import Spinner from "../../components/sharedComponents/spinner/Spinner";
 
 const SignupPage = () => {
+  const { createUser, updateUserProfile, signInWithGoogle } = useAuth();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+
+  // react hook form to maintain register form;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  // helper function to handle error;
+
+  const handleError = (error) => {
+    if (!error) return setError("");
+    if (error.code) {
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          setError(
+            "This email is already registered. Please login or use another email."
+          );
+          break;
+
+        case "auth/invalid-email":
+          setError("Invalid email format.");
+          break;
+        case "auth/weak-password":
+          setError("Password is too weak. Must be at least 6 characters.");
+          break;
+        case "auth/user-not-found":
+          setError("No account found with this email. Please sign up first.");
+          break;
+        case "auth/popup-closed-by-user":
+          setError("Google sign-in was cancelled. Please try again.");
+          break;
+        case "auth/network-request-failed":
+          setError("Network error! Check your internet connection.");
+          break;
+        default:
+          setError("Something went wrong. Please try again.");
+      }
+    } else {
+      setError("An unexpected error occurred.");
+    }
+  };
+
+  // handle submit of registration form;
+
+  const onSubmit = async (data) => {
+    setError("");
+    setLoading(true);
+    try {
+      const name = data.name;
+      const image = data.image[0];
+      const email = data.email;
+      const password = data.password;
+
+      // create user with firebase;
+      await createUser(email, password);
+
+      // upload profile image to imageBB;
+      const formData = new FormData();
+      formData.append("image", image);
+      const key = import.meta.env.VITE_IMAGEBB_API_KEY;
+      const uploadImageUrl = `https://api.imgbb.com/1/upload?key=${key}`;
+      const imageUploadRes = await axios.post(uploadImageUrl, formData);
+      const imageUrl = imageUploadRes.data.data.url;
+      console.log(imageUrl);
+
+      // update firebase profile;
+
+      await updateUserProfile(name, imageUrl);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // signup with google ;
+
+  const handleSignUpWithGoogle = async () => {
+    setError("");
+    setLoading(false);
+
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // the page start form the top after navigate;
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  if (loading) {
+    return <Spinner></Spinner>;
+  }
   return (
     <div className="min-h-screen  flex items-center justify-center py-5">
       <div className="relative w-full max-w-5xl">
@@ -51,90 +154,143 @@ const SignupPage = () => {
                   </p>
                 </div>
 
-                {/* Name input */}
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-medium mb-2">
-                    Name
-                  </label>
-                  <input
-                    type="name"
-                    placeholder="Enter your Name"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-300 focus:bg-white transition-colors"
-                  />
-                </div>
-
-                {/* Image input */}
-
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-medium mb-2">
-                    Image
-                  </label>
-                  <input
-                    type="file"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-300 focus:bg-white transition-colors"
-                  />
-                </div>
-
-                {/* Email Input */}
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-medium mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-300 focus:bg-white transition-colors"
-                  />
-                </div>
-
-                {/* Password Input */}
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-medium mb-2">
-                    Password
-                  </label>
-                  <div className="relative">
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  {/* Name input */}
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-medium mb-2">
+                      Name
+                    </label>
                     <input
-                      type={open ? "text" : "password"}
-                      placeholder="Enter your password"
+                      {...register("name", { required: "Name is required" })}
+                      type="name"
+                      placeholder="Enter your Name"
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-300 focus:bg-white transition-colors"
                     />
-                    <button
-                      onClick={() => setOpen(!open)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
-                    >
-                      {open ? (
-                        <FaEyeSlash size={18}></FaEyeSlash>
-                      ) : (
-                        <FaEye size={18} />
-                      )}
-                    </button>
+                    {errors.name && (
+                      <p className="text-red-500 text-sm">
+                        {errors.name.message}
+                      </p>
+                    )}
                   </div>
-                </div>
 
-                {/* Remember Me & Forgot Password */}
-                <div className="flex items-center justify-between mb-6">
-                  <label className="flex items-center gap-2 cursor-pointer">
+                  {/* Image input */}
+
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-medium mb-2">
+                      Image
+                    </label>
                     <input
-                      type="checkbox"
-                      className="w-4 h-4 rounded border-gray-300"
+                      {...register("image", { required: "Image is required" })}
+                      type="file"
+                      className="file-input w-full bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-300 focus:bg-white transition-colors"
                     />
-                    <span className="text-sm text-gray-600">Remember me</span>
-                  </label>
-                  <a
-                    href="#"
-                    className="text-sm text-gray-600 hover:text-gray-900"
+                    {errors.image && (
+                      <p className="text-red-500 text-sm">
+                        {errors.image.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Email Input */}
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-medium mb-2">
+                      Email
+                    </label>
+                    <input
+                      {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                          value: /^\S+@\S+\.\S+$/,
+                          message: "Invalid email formate",
+                        },
+                      })}
+                      type="email"
+                      placeholder="Enter your email"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-300 focus:bg-white transition-colors"
+                    />
+                    {errors.email && (
+                      <p className="text-red-500 text-sm">
+                        {errors.email.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Password Input */}
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-medium mb-2">
+                      Password
+                    </label>
+                    <div className="relative">
+                      <input
+                        {...register("password", {
+                          required: "Password is required",
+                          minLength: {
+                            value: 6,
+                            message: "Password must be at least 6 characters",
+                          },
+                          pattern: {
+                            value:
+                              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/,
+
+                            message:
+                              "Password must include uppercase, lowercase, number & special character",
+                          },
+                        })}
+                        type={open ? "text" : "password"}
+                        placeholder="Enter your password"
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-300 focus:bg-white transition-colors"
+                      />
+                      <button
+                        onClick={() => setOpen(!open)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
+                      >
+                        {open ? (
+                          <FaEyeSlash size={18}></FaEyeSlash>
+                        ) : (
+                          <FaEye size={18} />
+                        )}
+                      </button>
+                    </div>
+
+                    {errors.password && (
+                      <p className="text-red-500 text-sm">
+                        {errors.password.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <p className="text-red-500 text-sm mb-2">{error}</p>
+
+                  {/* Remember Me & Forgot Password */}
+                  <div className="flex items-center justify-between mb-6">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 rounded border-gray-300"
+                      />
+                      <span className="text-sm text-gray-600">Remember me</span>
+                    </label>
+                    <a
+                      href="#"
+                      className="text-sm text-gray-600 hover:text-gray-900"
+                    >
+                      Forget Password
+                    </a>
+                  </div>
+
+                  {/* Sign In Button */}
+                  <button
+                    type="submit"
+                    className="w-full bg-primary text-black py-3 rounded-lg font-medium mb-4"
                   >
-                    Forget Password
-                  </a>
-                </div>
-
-                {/* Sign In Button */}
-                <button className="w-full bg-primary text-white py-3 rounded-lg font-medium mb-4">
-                  Sign Up
-                </button>
-
+                    Sign Up
+                  </button>
+                </form>
                 {/* Google Sign In */}
-                <button className="w-full flex items-center justify-center gap-3 py-3 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors mb-8">
+                <button
+                  onClick={handleSignUpWithGoogle}
+                  className="w-full flex items-center justify-center gap-3 py-3 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors mb-8"
+                >
                   <FcGoogle className="text-red-500" size={18} />
                   <span className="font-medium">Sign in with Google</span>
                 </button>

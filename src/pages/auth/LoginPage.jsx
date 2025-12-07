@@ -3,14 +3,97 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import libraryImg from "../../assets/library-image-auth.jpg";
 import { NavLink } from "react-router";
+import useAuth from "../../hooks/useAuth";
+import { useForm } from "react-hook-form";
+import Spinner from "../../components/sharedComponents/spinner/Spinner";
 
-export default function ModernLogin() {
-
+const LoginPage = () => {
+  const { signIn, signInWithGoogle } = useAuth();
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  // react hook form to maintain login form;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  // helper function to handle error;
+
+  const handleError = (error) => {
+    if (!error) return setError("");
+    if (error.code) {
+      switch (error.code) {
+        case "auth/invalid-email":
+          setError("Invalid email format.");
+          break;
+
+        case "auth/user-not-found":
+          setError("No user found with this email.");
+          break;
+
+        case "auth/wrong-password":
+          setError("Incorrect password. Try again.");
+          break;
+
+        case "auth/too-many-requests":
+          setError("Too many failed attempts. Please try later.");
+          break;
+
+        case "auth/network-request-failed":
+          setError("Network error. Check your internet connection.");
+          break;
+
+        default:
+          setError("Something went wrong. Try again.");
+      }
+    }
+  };
+
+  // sign in
+
+  const formSubmit = async (data) => {
+    setError("");
+    setLoading(true);
+
+    try {
+      const email = data.email;
+      const password = data.password;
+      //  sign In with firebase;
+      await signIn(email, password);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // sign In with google;
+
+  const handleSignInWithGoogle = async () => {
+    setError("");
+    setLoading(true);
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // page start at the top position;
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  if (loading) {
+    return <Spinner></Spinner>;
+  }
   return (
     <div className="min-h-screen  flex items-center justify-center py-5">
       <div className="relative w-full max-w-5xl">
@@ -52,66 +135,91 @@ export default function ModernLogin() {
                   </p>
                 </div>
 
-                {/* Email Input */}
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-medium mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-300 focus:bg-white transition-colors"
-                  />
-                </div>
-
-                {/* Password Input */}
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-medium mb-2">
-                    Password
-                  </label>
-                  <div className="relative">
+                <form onSubmit={handleSubmit(formSubmit)}>
+                  {/* Email Input */}
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-medium mb-2">
+                      Email
+                    </label>
                     <input
-                      type={open ? "text" : "password"}
-                      placeholder="Enter your password"
+                      {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                          value: /^\S+@\S+\.\S+$/,
+                          message: "Invalid email address",
+                        },
+                      })}
+                      type="email"
+                      placeholder="Enter your email"
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-300 focus:bg-white transition-colors"
                     />
-                    <button
-                      onClick={() => setOpen(!open)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
-                    >
-                      {open ? (
-                        <FaEyeSlash size={18}></FaEyeSlash>
-                      ) : (
-                        <FaEye size={18} />
-                      )}
-                    </button>
+                    {errors.email && (
+                      <p className="text-red-500 text-sm">
+                        {errors.email.message}
+                      </p>
+                    )}
                   </div>
-                </div>
 
-                {/* Remember Me & Forgot Password */}
-                <div className="flex items-center justify-between mb-6">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 rounded border-gray-300"
-                    />
-                    <span className="text-sm text-gray-600">Remember me</span>
-                  </label>
-                  <a
-                    href="#"
-                    className="text-sm text-gray-600 hover:text-gray-900"
+                  {/* Password Input */}
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-medium mb-2">
+                      Password
+                    </label>
+                    <div className="relative">
+                      <input
+                        {...register("password", {
+                          required: "Password is required",
+                        })}
+                        type={open ? "text" : "password"}
+                        placeholder="Enter your password"
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-300 focus:bg-white transition-colors"
+                      />
+                      <button
+                        onClick={() => setOpen(!open)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
+                      >
+                        {open ? (
+                          <FaEyeSlash size={18}></FaEyeSlash>
+                        ) : (
+                          <FaEye size={18} />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  <p className="text-red-500 text-sm mb-2">{error}</p>
+
+                  {/* Remember Me & Forgot Password */}
+                  <div className="flex items-center justify-between mb-6">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 rounded border-gray-300"
+                      />
+                      <span className="text-sm text-gray-600">Remember me</span>
+                    </label>
+                    <a
+                      href="#"
+                      className="text-sm text-gray-600 hover:text-gray-900"
+                    >
+                      Forget Password
+                    </a>
+                  </div>
+
+                  {/* Sign In Button */}
+                  <button
+                    type="submit"
+                    className="w-full bg-primary text-black py-3 rounded-lg font-medium mb-4"
                   >
-                    Forget Password
-                  </a>
-                </div>
-
-                {/* Sign In Button */}
-                <button className="w-full bg-primary text-white py-3 rounded-lg font-medium mb-4">
-                  Sign In
-                </button>
+                    Sign In
+                  </button>
+                </form>
 
                 {/* Google Sign In */}
-                <button className="w-full flex items-center justify-center gap-3 py-3 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors mb-8">
+                <button
+                  onClick={handleSignInWithGoogle}
+                  className="w-full flex items-center justify-center gap-3 py-3 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors mb-8"
+                >
                   <FcGoogle className="text-red-500" size={18} />
                   <span className="font-medium">Sign in with Google</span>
                 </button>
@@ -134,4 +242,6 @@ export default function ModernLogin() {
       </div>
     </div>
   );
-}
+};
+
+export default LoginPage;

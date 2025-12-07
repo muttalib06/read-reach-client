@@ -13,9 +13,11 @@ import { AiOutlineHome } from "react-icons/ai";
 import { IoBookOutline } from "react-icons/io5";
 import { MdOutlineDashboard } from "react-icons/md";
 import { FiUserPlus } from "react-icons/fi";
-import { IoMdLogIn } from "react-icons/io";
+import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
+import useAuth from "../../../hooks/useAuth";
 
-const NavbarDropdown = () => {
+const NavbarDropdown = ({ handleSignOut }) => {
+  const { user } = useAuth();
   const [open, setOpen] = useState(false);
 
   return (
@@ -35,7 +37,7 @@ const NavbarDropdown = () => {
           initial={wrapperVariants.closed}
           variants={wrapperVariants}
           style={{ originY: "top" }}
-          className="flex flex-col gap-2 p-2 rounded-lg bg-white shadow-xl absolute top-[120%] right-0 w-48 overflow-hidden space-y-3"
+          className="flex flex-col gap-2 p-2 rounded-lg bg-white shadow-xl absolute top-[120%] right-0 w-48 overflow-hidden space-y-3 z-15"
         >
           <li className="flex justify-between items-center">
             <NavLink
@@ -43,8 +45,8 @@ const NavbarDropdown = () => {
               onClick={() => setOpen(false)}
               className="flex items-center gap-2"
             >
-                <AiOutlineHome className="text-xl" />
-                Home
+              <AiOutlineHome className="text-xl" />
+              Home
             </NavLink>
             <div>
               <label className="toggle text-base-content">
@@ -131,14 +133,28 @@ const NavbarDropdown = () => {
           </li>
 
           <li>
-            <NavLink
-              className="font-semibold flex items-center gap-2"
-              to="/login"
-              onClick={() => setOpen(false)}
-            >
-              <IoMdLogIn className="text-2xl" />
-              Login
-            </NavLink>
+            {user ? (
+              <button
+                className="font-semibold flex items-center gap-2"
+                to="/login"
+                onClick={() => {
+                  setOpen(false);
+                  handleSignOut();
+                }}
+              >
+                <IoMdLogOut className="text-2xl" />
+                Sign Out
+              </button>
+            ) : (
+              <NavLink
+                className="font-semibold flex items-center gap-2"
+                to="/login"
+                onClick={() => setOpen(false)}
+              >
+                <IoMdLogIn className="text-2xl" />
+                Login
+              </NavLink>
+            )}
           </li>
         </motion.ul>
       </motion.div>

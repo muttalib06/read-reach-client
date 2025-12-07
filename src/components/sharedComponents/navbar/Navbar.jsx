@@ -1,9 +1,33 @@
 import React from "react";
 import { NavLink } from "react-router";
 import NavbarDropdown from "./NavbarDropdown";
-import { FaUser } from "react-icons/fa";
+import useAuth from "../../../hooks/useAuth";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
+  const { user, logOut } = useAuth();
+
+  // handle sign out;
+
+  const handleSignOut = async () => {
+    try {
+      await logOut();
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "You are Logout",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch{
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      
+      });
+    }
+  };
   return (
     <div className="navbar bg-base-100 shadow-sm flex justify-between items-center px-3 lg:px-8">
       <div>
@@ -33,7 +57,8 @@ const Navbar = () => {
       <div className="hidden lg:block">
         <ul className="flex items-center gap-4 font-semibold">
           <li>
-            <NavLink to="/"
+            <NavLink
+              to="/"
               className={({ isActive }) => (isActive ? "text-primary" : "")}
             >
               Home
@@ -41,15 +66,15 @@ const Navbar = () => {
           </li>
           <li>
             <NavLink
-            to="/books"
-              className={({ isActive }) => (isActive?"text-primary" : "")}
+              to="/books"
+              className={({ isActive }) => (isActive ? "text-primary" : "")}
             >
               Books
             </NavLink>
           </li>
           <li>
             <NavLink
-            to="/dashboard"
+              to="/dashboard"
               className={({ isActive }) => (isActive ? "text-primary" : "")}
             >
               Dashboard
@@ -112,25 +137,53 @@ const Navbar = () => {
             </svg>
           </label>
         </div>
-        <div>
-          <FaUser></FaUser>
-        </div>
+
+        {/* profile image  */}
+
+        {user && (
+          <div>
+            <div className="avatar">
+              <div className="ring-primary ring-offset-base-100 w-8 rounded-full ring-2 ring-offset-2">
+                <img src={user?.photoURL} />
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="flex items-center gap-3">
-          <NavLink to="/signup" className="font-semibold">Sign Up</NavLink>
-          <NavLink to="/login" className="btn bg-primary font-semibold text-white">
-            Login
+          <NavLink to="/signup" className="font-semibold">
+            Sign Up
           </NavLink>
+
+          {user ? (
+            <button onClick={handleSignOut} className="btn bg-primary font-semibold text-black">
+              Sign Out
+            </button>
+          ) : (
+            <NavLink
+              to="/login"
+              className="btn text-black bg-primary font-semibold "
+            >
+              Login
+            </NavLink>
+          )}
         </div>
       </div>
 
       {/* navbar right hamburger menu */}
       <div className="flex lg:hidden justify-between items-center gap-5">
-       
+        {/* profile */}
+        {user && (
+          <div>
+            <div className="avatar">
+              <div className="ring-primary ring-offset-base-100 w-8 rounded-full ring-2 ring-offset-2">
+                <img src={user?.photoURL} />
+              </div>
+            </div>
+          </div>
+        )}
         <div>
-          <FaUser></FaUser>
-        </div>
-        <div>
-          <NavbarDropdown></NavbarDropdown>
+          <NavbarDropdown handleSignOut={handleSignOut}></NavbarDropdown>
         </div>
       </div>
     </div>
