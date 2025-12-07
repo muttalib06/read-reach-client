@@ -6,16 +6,18 @@ import useAuth from "../hooks/useAuth";
 import Spinner from "../components/sharedComponents/spinner/Spinner";
 
 const MainLayout = () => {
-  const {loading} = useAuth();
+  const { loading } = useAuth();
 
-  if(loading){
-    return <Spinner></Spinner>
+  if (loading) {
+    return <Spinner></Spinner>;
   }
   return (
     <div>
       <Navbar></Navbar>
 
-      <Outlet></Outlet>
+      <div className="max-w-11/12 mx-auto my-10">
+        <Outlet></Outlet>
+      </div>
 
       <Footer></Footer>
     </div>

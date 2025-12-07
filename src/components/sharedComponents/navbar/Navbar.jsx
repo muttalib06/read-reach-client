@@ -29,7 +29,7 @@ const Navbar = () => {
     }
   };
   return (
-    <div className="navbar bg-base-100 shadow-sm flex justify-between items-center px-3 lg:px-8">
+    <div className="navbar bg-base-100 mt-4 flex justify-between items-center px-3 lg:px-8">
       <div>
         {/* navbar left side */}
         <div className="flex justify-between items-center">
