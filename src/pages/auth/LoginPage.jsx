@@ -27,20 +27,45 @@ const LoginPage = () => {
     if (!error) return setError("");
     if (error.code) {
       switch (error.code) {
+        // Login Errors
         case "auth/invalid-email":
           setError("Invalid email format.");
           break;
 
         case "auth/user-not-found":
-          setError("No user found with this email.");
+          setError("No account found with this email.");
           break;
 
         case "auth/wrong-password":
-          setError("Incorrect password. Try again.");
+          setError("Incorrect password. Please try again.");
           break;
 
+        case "auth/user-disabled":
+          setError("This account has been disabled. Contact support.");
+          break;
+
+        case "auth/invalid-credential":
+          setError("Invalid email or password. Please try again.");
+          break;
+
+        // Google Sign-in Errors
+        case "auth/popup-closed-by-user":
+          setError("Google sign-in was cancelled. Please try again.");
+          break;
+
+        case "auth/popup-blocked":
+          setError("Popup was blocked. Please allow popups and try again.");
+          break;
+
+        case "auth/account-exists-with-different-credential":
+          setError(
+            "An account exists with this email using a different sign-in method."
+          );
+          break;
+
+        // Rate Limiting & Network
         case "auth/too-many-requests":
-          setError("Too many failed attempts. Please try later.");
+          setError("Too many failed login attempts. Please try again later.");
           break;
 
         case "auth/network-request-failed":
@@ -48,7 +73,7 @@ const LoginPage = () => {
           break;
 
         default:
-          setError("Something went wrong. Try again.");
+          setError("Login failed. Please try again.");
       }
     }
   };
