@@ -27,7 +27,7 @@ const LoginPage = () => {
     if (!error) return setError("");
     if (error.code) {
       switch (error.code) {
-        // Login Errors
+        // ========== Email/Password Login Errors ==========
         case "auth/invalid-email":
           setError("Invalid email format.");
           break;
@@ -48,7 +48,7 @@ const LoginPage = () => {
           setError("Invalid email or password. Please try again.");
           break;
 
-        // Google Sign-in Errors
+        // ========== Google Sign-in Errors ==========
         case "auth/popup-closed-by-user":
           setError("Google sign-in was cancelled. Please try again.");
           break;
@@ -57,19 +57,39 @@ const LoginPage = () => {
           setError("Popup was blocked. Please allow popups and try again.");
           break;
 
+        case "auth/cancelled-popup-request":
+          setError("Sign-in was cancelled. Please try again.");
+          break;
+
         case "auth/account-exists-with-different-credential":
           setError(
             "An account exists with this email using a different sign-in method."
           );
           break;
 
-        // Rate Limiting & Network
+        case "auth/credential-already-in-use":
+          setError("This Google account is already linked to another user.");
+          break;
+
+        case "auth/operation-not-allowed":
+          setError("Google sign-in is not enabled. Contact support.");
+          break;
+
+        case "auth/unauthorized-domain":
+          setError("This domain is not authorized for Google sign-in.");
+          break;
+
+        // ========== Common Errors (Both Methods) ==========
         case "auth/too-many-requests":
           setError("Too many failed login attempts. Please try again later.");
           break;
 
         case "auth/network-request-failed":
           setError("Network error. Check your internet connection.");
+          break;
+
+        case "auth/timeout":
+          setError("Sign-in timed out. Please try again.");
           break;
 
         default:
