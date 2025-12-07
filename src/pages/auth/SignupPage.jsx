@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import libraryImg from "../../assets/library-image-auth.jpg";
-import { NavLink } from "react-router";
+import { NavLink, useLocation, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -13,6 +13,10 @@ const SignupPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  // read the redirect state;
+  const from = location.state?.from?.pathname || "/";
 
   // react hook form to maintain register form;
   const {
@@ -82,6 +86,7 @@ const SignupPage = () => {
       // update firebase profile;
 
       await updateUserProfile(name, imageUrl);
+      navigate(from, { replace: true });
     } catch (error) {
       handleError(error);
     } finally {
@@ -97,6 +102,7 @@ const SignupPage = () => {
 
     try {
       await signInWithGoogle();
+      navigate(from, { replace: true });
     } catch (error) {
       handleError(error);
     } finally {
@@ -299,6 +305,7 @@ const SignupPage = () => {
                 <p className="text-center text-sm text-gray-600">
                   Already have an account?{" "}
                   <NavLink
+                    state={location.state}
                     to="/login"
                     href="#"
                     className="text-gray-900 font-medium hover:underline"

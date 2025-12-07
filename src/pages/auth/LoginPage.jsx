@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import libraryImg from "../../assets/library-image-auth.jpg";
-import { NavLink } from "react-router";
+import { NavLink, useLocation, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import Spinner from "../../components/sharedComponents/spinner/Spinner";
@@ -12,6 +12,12 @@ const LoginPage = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // read redirect state
+  const from = location.state?.from?.pathname || "/";
+  console.log(from);
 
   // react hook form to maintain login form;
 
@@ -109,6 +115,7 @@ const LoginPage = () => {
       const password = data.password;
       //  sign In with firebase;
       await signIn(email, password);
+      navigate(from, { replace: true });
     } catch (error) {
       handleError(error);
     } finally {
@@ -123,6 +130,7 @@ const LoginPage = () => {
     setLoading(true);
     try {
       await signInWithGoogle();
+      navigate(from, { replace: true });
     } catch (error) {
       handleError(error);
     } finally {
@@ -273,6 +281,7 @@ const LoginPage = () => {
                 <p className="text-center text-sm text-gray-600">
                   Don't have an account?{" "}
                   <NavLink
+                    state={location.state}
                     to="/signup"
                     href="#"
                     className="text-gray-900 font-medium hover:underline"
