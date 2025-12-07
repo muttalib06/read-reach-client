@@ -42,13 +42,14 @@ const Banner = () => {
       slidesPerView={1}
       speed={2000}
       autoplay={{
-        delay:4000,
+        delay: 4000,
       }}
       pagination={{
         clickable: true,
         dynamicBullets: true,
       }}
       loop={true}
+      className="paginationCustom"
     >
       {sliders.map((slider, index) => (
         <SwiperSlide>
