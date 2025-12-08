@@ -29,7 +29,7 @@ const Navbar = () => {
     }
   };
   return (
-    <div className="sticky top-0 z-50 navbar bg-base-100 py-6 flex justify-between items-center px-3 lg:px-8">
+    <div className="sticky top-0 z-2000 navbar bg-base-100 py-6 flex justify-between items-center px-3 lg:px-8">
       <div>
         {/* navbar left side */}
         <div className="flex justify-between items-center">
@@ -156,13 +156,13 @@ const Navbar = () => {
           </NavLink>
 
           {user ? (
-            <button onClick={handleSignOut} className="btn bg-primary font-semibold text-black">
+            <button onClick={handleSignOut} className="btn bg-primary font-semibold text-white">
               Sign Out
             </button>
           ) : (
             <NavLink
               to="/login"
-              className="btn text-black bg-primary font-semibold "
+              className="btn text-white bg-primary font-semibold "
             >
               Login
             </NavLink>

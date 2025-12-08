@@ -37,7 +37,7 @@ const NavbarDropdown = ({ handleSignOut }) => {
           initial={wrapperVariants.closed}
           variants={wrapperVariants}
           style={{ originY: "top" }}
-          className="flex flex-col gap-2 p-2 rounded-lg bg-white shadow-xl absolute top-[120%] right-0 w-48 overflow-hidden space-y-3 z-15"
+          className="flex flex-col gap-2 p-8 rounded-lg bg-white shadow-xl absolute top-[120%] right-0 w-48 overflow-hidden space-y-3 z-15"
         >
           <li className="flex justify-between items-center">
             <NavLink

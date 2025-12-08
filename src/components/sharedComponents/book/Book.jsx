@@ -57,9 +57,10 @@ const Book = ({ book }) => {
       </div>
 
       {/* Add to Cart Button - Compact */}
-      <button className="w-full border border-primary hover:bg-primary text-black font-semibold py-2.5 px-4 rounded-full flex items-center justify-center gap-2 transition-colors text-sm">
-        <LuShoppingCart className="w-4 h-4" />
-        Add To Cart
+      <button className="w-full border border-primary text-black font-semibold py-2.5 px-4 rounded-full flex items-center justify-center gap-2 text-sm relative overflow-hidden group transition-colors duration-300 hover:text-white">
+        <span className="absolute inset-0 bg-primary transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
+        <LuShoppingCart className="w-4 h-4 relative z-10" />
+        <span className="relative z-10">Add To Cart</span>
       </button>
     </div>
   );

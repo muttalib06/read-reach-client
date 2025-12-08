@@ -262,7 +262,7 @@ const LoginPage = () => {
                   {/* Sign In Button */}
                   <button
                     type="submit"
-                    className="w-full bg-primary text-black py-3 rounded-lg font-medium mb-4"
+                    className="w-full bg-primary text-white py-3 rounded-lg font-medium mb-4"
                   >
                     Sign In
                   </button>
