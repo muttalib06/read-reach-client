@@ -29,7 +29,7 @@ const Navbar = () => {
     }
   };
   return (
-    <div className="navbar bg-base-100 mt-4 flex justify-between items-center px-3 lg:px-8">
+    <div className="sticky top-0 z-50 navbar bg-base-100 py-6 flex justify-between items-center px-3 lg:px-8">
       <div>
         {/* navbar left side */}
         <div className="flex justify-between items-center">

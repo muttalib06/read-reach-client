@@ -11,6 +11,7 @@ import { Navigation, Pagination, Scrollbar, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { NavLink } from "react-router";
 
 const Banner = () => {
   const sliders = [
@@ -59,16 +60,18 @@ const Banner = () => {
             style={{ backgroundImage: `url(${slider.image})` }}
           >
             <div className="absolute inset-0 bg-black/60 rounded-2xl"></div>
-            <div className="z-10 relative space-y-5 max-w-2/4">
+            <div className="z-10 relative space-y-5 px-2 lg:max-w-2/4">
               <h2 className="font-bold text-5xl text-white">{slider.title}</h2>
               <p className="text-white text-xl font-semibold">
                 {slider.description}
               </p>
 
-              <button className="flex items-center gap-2 rounded-2xl font-semibold  px-6 py-4 bg-transparent text-white border-2 border-primary hover:bg-white/20  transition-all duration-300">
-                Explore More
-                <LuCircleArrowOutUpRight className="text-2xl" />
-              </button>
+             
+                <NavLink to="/books" className="inline-flex items-center gap-2 rounded-2xl font-semibold  px-6 py-4 bg-transparent text-white border-2 border-primary hover:bg-white/20  transition-all duration-300">
+                  Explore More
+                  <LuCircleArrowOutUpRight className="text-2xl" />
+                </NavLink>
+            
             </div>
           </div>
         </SwiperSlide>
