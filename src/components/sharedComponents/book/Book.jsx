@@ -2,17 +2,17 @@ import React from "react";
 import { CiStar } from "react-icons/ci";
 import { LuShoppingCart } from "react-icons/lu";
 
-const Book = () => {
+const Book = ({ book }) => {
   return (
-    <div className="max-w-xs mx-auto p-4 bg-white rounded-lg shadow-sm">
+    <div className="p-4 bg-white rounded-lg shadow-sm flex flex-col h-full">
       {/* Book Cover Image - Compact */}
       <div className="relative bg-gray-100 rounded-lg p-4 flex justify-center items-center mb-3 overflow-hidden group">
         {/* Overlay on Hover */}
         <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-lg"></div>
 
         <img
-          src="https://covers.openlibrary.org/b/isbn/9781451648539-L.jpg"
-          alt="Grow Flower Book Cover"
+          src={book.coverImage}
+          alt={book.title}
           className="rounded h-40 w-auto object-cover transition-all duration-500 ease-in-out group-hover:scale-110 cursor-pointer relative z-10"
         />
 
@@ -23,28 +23,27 @@ const Book = () => {
       </div>
 
       {/* Category */}
-      <p className="text-gray-500 text-xs mb-1">Design Low Book</p>
+      <p className="text-gray-500 text-xs mb-1">{book.category}</p>
 
       {/* Title - Shorter */}
       <h1 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
-        Simple Things You To Save BOOK
+        {book.title}
       </h1>
 
       {/* Price - Compact */}
       <div className="flex items-center gap-2 mb-3">
-        <span className="text-xl font-bold text-orange-500">$30.00</span>
-        <span className="text-sm text-gray-400 line-through">$39.99</span>
+        <span className="text-xl font-bold text-orange-500">${book.price}</span>
       </div>
 
-      {/* Author and Rating - More Compact */}
-      <div className="flex items-center justify-between mb-3">
+      {/* Spacer - pushes content below to bottom */}
+      <div className="flex-grow"></div>
+
+      {/* Author and Rating - More Compact with fixed min-height */}
+      <div className="flex items-center justify-between mb-3 min-h-[24px]">
         <div className="flex items-center gap-1.5">
-          <img
-            src="https://api.dicebear.com/7.x/avataaars/svg?seed=Wilson"
-            alt="Wilson"
-            className="w-6 h-6 rounded-full"
-          />
-          <span className="text-gray-700 text-sm font-medium">Wilson</span>
+          <span className="text-gray-700 text-sm font-medium">
+            {book.author}
+          </span>
         </div>
 
         {/* Star Rating - Smaller */}
