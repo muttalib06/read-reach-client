@@ -16,12 +16,14 @@ const LatestBook = () => {
       return res.data;
     },
   });
-  console.log(books);
   return (
-    <div>
-      <div className="my-8">
-        <h2 className="font-bold text-3xl">Latest Arrivals</h2>
-      </div>
+    <div className="mt-10">
+     <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-800 mb-2">
+            Latest Arrivals
+          </h2>
+          <div className="w-20 h-1 bg-amber-500 mx-auto"></div>
+        </div>
 
       {/* books section */}
 

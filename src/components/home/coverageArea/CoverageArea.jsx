@@ -40,9 +40,11 @@ const CoverageArea = () => {
   }, []);
 
   return (
-    <div className=" mt-8">
+    <div className=" mt-10">
       <div className="my-10  flex flex-col md:flex-row space-y-3 md:space-y-0  justify-between items-center">
-        <h2 className="font-bold text-3xl">Our Service Areas</h2>
+        <h2 className="font-bold text-3xl text-slate-800 ">
+          Our Service Areas
+        </h2>
         <form
           onSubmit={handleSearch}
           className="flex items-stretch shadow-sm hover:shadow-md transition-shadow duration-300 rounded-xl overflow-hidden"
