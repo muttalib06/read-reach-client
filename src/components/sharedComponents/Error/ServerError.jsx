@@ -1,8 +1,8 @@
 import React from "react";
 
-const ServerError = () => {
+const ServerError = ({code}) => {
   return (
-    <div className="bg-gray-50 flex items-center justify-center p-4">
+    <div className="flex items-center justify-center p-4">
       <div className="text-center max-w-md">
         {/* Icon */}
         <div className="flex justify-center mb-6">
@@ -25,7 +25,7 @@ const ServerError = () => {
 
         {/* Error Title */}
         <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4">
-          500 - Server error
+          {code} - Server error
         </h1>
 
         {/* Error Description */}

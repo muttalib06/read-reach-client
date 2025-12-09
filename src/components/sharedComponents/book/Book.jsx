@@ -1,8 +1,9 @@
 import React from "react";
 import { CiStar } from "react-icons/ci";
-import { LuShoppingCart } from "react-icons/lu";
+import { NavLink } from "react-router";
 
 const Book = ({ book }) => {
+  console.log(book);
   return (
     <div className="p-4 bg-white rounded-lg shadow-sm flex flex-col h-full">
       {/* Book Cover Image - Compact */}
@@ -17,9 +18,12 @@ const Book = ({ book }) => {
         />
 
         {/* Quick View Button (appears on hover) */}
-        <button className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-gray-800 px-4 py-2 rounded-full text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 scale-90 group-hover:scale-100 z-20 shadow-lg">
+        <NavLink
+          to={`/book-detail/${book._id}`}
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-gray-800 px-4 py-2 rounded-full text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 scale-90 group-hover:scale-100 z-20 shadow-lg"
+        >
           Quick View
-        </button>
+        </NavLink>
       </div>
 
       {/* Category */}
@@ -36,10 +40,10 @@ const Book = ({ book }) => {
       </div>
 
       {/* Spacer - pushes content below to bottom */}
-      <div className="flex-grow"></div>
+      <div className="grow"></div>
 
       {/* Author and Rating - More Compact with fixed min-height */}
-      <div className="flex items-center justify-between mb-3 min-h-[24px]">
+      <div className="flex items-center justify-between mb-3 min-h-6">
         <div className="flex items-center gap-1.5">
           <span className="text-gray-700 text-sm font-medium">
             {book.author}
@@ -57,11 +61,13 @@ const Book = ({ book }) => {
       </div>
 
       {/* Add to Cart Button - Compact */}
-      <button className="w-full border border-primary text-black font-semibold py-2.5 px-4 rounded-full flex items-center justify-center gap-2 text-sm relative overflow-hidden group transition-colors duration-300 hover:text-white">
+      <NavLink
+        to={`/book-detail/${book._id}`}
+        className="w-full border border-primary text-black font-semibold py-2.5 px-4 rounded-full flex items-center justify-center gap-2 text-sm relative overflow-hidden group transition-colors duration-300 hover:text-white"
+      >
         <span className="absolute inset-0 bg-primary transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
-        <LuShoppingCart className="w-4 h-4 relative z-10" />
-        <span className="relative z-10">Add To Cart</span>
-      </button>
+        <span className="relative z-10">View Detail...</span>
+      </NavLink>
     </div>
   );
 };

@@ -49,7 +49,7 @@ const Testimonial = () => {
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
           spaceBetween={2}
-          slidesPerView={1}
+          slidesPerView={3}
           loop={true}
           autoplay={{
             delay: 5000,

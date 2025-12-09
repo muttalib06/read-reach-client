@@ -51,7 +51,7 @@ const WhyChooseUs = () => {
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group"
+                className="bg-white rounded-2xl p-6  shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group"
               >
                 <div className="flex items-start gap-4">
                   {/* Icon */}
