@@ -3,6 +3,7 @@ import Banner from '../../components/home/banner/Banner';
 import LatestBook from '../../components/home/LatestBook/LatestBook';
 import CoverageArea from '../../components/home/coverageArea/CoverageArea';
 import WhyChooseUs from '../../components/home/whyChoose/WhyChooseUs';
+import Stats from '../../components/home/stats/Stats';
 
 const Home = () => {
         return (
@@ -18,6 +19,9 @@ const Home = () => {
 
                       {/* why choose us */}
                       <WhyChooseUs></WhyChooseUs>
+
+                      {/* stats section */}
+                      <Stats></Stats>
                         
                 </div>
         );
