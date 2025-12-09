@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "name": "Sarah Mitchell",
+    "profession": "PhD Student, Biology",
+    "image": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
+    "review": "ReadReach has been a lifesaver during my research! I can request rare academic books and get them delivered right to my doorstep. No more wasting hours commuting to the library."
+  },
+  {
+    "id": 2,
+    "name": "Ahmed Rahman",
+    "profession": "Software Engineer & Book Enthusiast",
+    "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
+    "review": "The convenience of having books delivered while I'm working from home is incredible. The tracking system keeps me updated, and the delivery team is always professional and punctual."
+  },
+  {
+    "id": 3,
+    "name": "Emily Chen",
+    "profession": "High School Teacher",
+    "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop",
+    "review": "I use BookCourier to get educational resources for my classroom. The pickup and return system is seamless, and it saves me so much time that I can now spend with my students."
+  },
+  {
+    "id": 4,
+    "name": "James Cooper",
+    "profession": "Medical Student",
+    "image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
+    "review": "With my hectic schedule, visiting the library was nearly impossible. BookCourier delivers medical textbooks right when I need them. It's like having a personal library assistant!"
+  },
+  {
+    "id": 5,
+    "name": "Priya Sharma",
+    "profession": "Freelance Writer",
+    "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop",
+    "review": "As a writer doing research, I need access to various books constantly. ReadReach's service is reliable, affordable, and their book collection across partner libraries is extensive."
+  },
+  {
+    "id": 6,
+    "name": "Marcus Johnson",
+    "profession": "Law Student",
+    "image": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop",
+    "review": "The legal texts I need are heavy and difficult to carry. ReadReach's delivery service has made studying so much easier. I can focus on my cases instead of logistics."
+  },
+  {
+    "id": 7,
+    "name": "Lisa Anderson",
+    "profession": "Stay-at-Home Mom & Avid Reader",
+    "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop",
+    "review": "With two young kids at home, going to the library is a challenge. ReadReach brings books to my door and picks them up when I'm done. It's a parent's dream service!"
+  },
+  {
+    "id": 8,
+    "name": "David Kim",
+    "profession": "Architecture Graduate Student",
+    "image": "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400&h=400&fit=crop",
+    "review": "The architecture reference books I need are rare and only available in specific libraries. ReadReach connects me to multiple libraries and delivers within 24 hours. Absolutely brilliant!"
+  },
+  {
+    "id": 9,
+    "name": "Fatima Al-Mazrui",
+    "profession": "University Librarian",
+    "image": "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=400&fit=crop",
+    "review": "From a librarian's perspective, ReadReach has revolutionized how we serve our community. It's increased book circulation and made our resources accessible to everyone, regardless of mobility."
+  },
+  {
+    "id": 10,
+    "name": "Robert Thompson",
+    "profession": "Retired Professor & History Buff",
+    "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
+    "review": "At my age, carrying heavy history books from the library isn't easy. ReadReach's service is respectful, reliable, and has rekindled my love for deep reading. Truly exceptional!"
+  }
+]

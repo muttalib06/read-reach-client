@@ -43,7 +43,7 @@ const Stats = () => {
             <h1 className="text-4xl md:text-5xl font-bold text-slate-800  mb-3">
               Our Growth at a Glance
             </h1>
-            <p className="text-gray-600 text-lg max-w-2/4">
+            <p className="text-gray-600 text-lg md:max-w-2/4">
               ReadReach is expanding every day—connecting readers with libraries
               across Bangladesh.These numbers reflect the trust our users place
               in our service.

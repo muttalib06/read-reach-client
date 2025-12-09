@@ -255,9 +255,7 @@ const HowItWorks = () => {
           <div
             className="absolute -top-3 -left-3 w-8 h-8 rounded-full flex items-center justify-center shadow-lg text-xl"
             style={{ backgroundColor: "#ff9d66" }}
-          >
-            
-          </div>
+          ></div>
           {/* Dotted arc */}
           <svg
             className="absolute -left-24 top-4 w-32 h-16"
@@ -283,10 +281,14 @@ const HowItWorks = () => {
     <div className=" mt-10 rounded bg-[#f2f0ee] flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-16 sm:mb-20">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-800 mb-4">
-            How it works
-          </h1>
+        <div className="text-center mb-16 sm:mb-20 space-y-3">
+          <div>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-800 mb-4">
+              How it works
+            </h1>
+            <div className="w-20 h-1 bg-amber-500 mx-auto"></div>
+          </div>
+
           <p className="text-sm sm:text-base md:text-lg text-slate-600 max-w-2xl mx-auto">
             ReadReach makes book borrowing simple and convenient with our easy
             4-step process
