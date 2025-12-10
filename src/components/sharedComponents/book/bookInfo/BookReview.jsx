@@ -1,9 +1,8 @@
 import React from "react";
 
-const BookReview = () => {
-  const StarIcon = ({ filled }) => (
+ const StarIcon = ({ filled }) => (
     <svg
-      className="w-6 h-6"
+      className="w-5 h-5 sm:w-6 sm:h-6"
       fill={filled ? "#FF8A00" : "none"}
       stroke={filled ? "#FF8A00" : "#D1D5DB"}
       strokeWidth="1.5"
@@ -17,113 +16,122 @@ const BookReview = () => {
     </svg>
   );
 
+
+const BookReview = () => {
+ 
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white">
-      {/* Existing Review */}
-      <div className="flex gap-4 pb-6 border-b border-gray-200">
-        <img
-          src="https://randomuser.me/api/portraits/women/44.jpg"
-          alt="Leslie Alexander"
-          className="w-16 h-16 rounded-full object-cover"
-        />
-        <div className="flex-1">
-          <div className="flex items-start justify-between">
+    <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 bg-white">
+      <div>
+        {/* Existing Review */}
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pb-6 border-b border-gray-200">
+          <img
+            src="https://randomuser.me/api/portraits/women/44.jpg"
+            alt="Leslie Alexander"
+            className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover"
+          />
+          <div className="flex-1">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+              <div>
+                <h3 className="font-semibold text-base sm:text-lg text-gray-900">
+                  Leslie Alexander
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-500">
+                  February 10, 2024 at 2:37 pm
+                </p>
+              </div>
+              <div className="flex gap-1">
+                <StarIcon filled={true} />
+                <StarIcon filled={true} />
+                <StarIcon filled={true} />
+                <StarIcon filled={true} />
+                <StarIcon filled={false} />
+              </div>
+            </div>
+            <p className="mt-3 text-sm sm:text-base text-gray-700 leading-relaxed">
+              Neque porro est qui dolorem ipsum quia quaed inventor veritatis et
+              quasi architecto var sed efficitur turpis gilla sed sit amet finibus
+              eros. Lorem Ipsum is simply dummy
+            </p>
+          </div>
+        </div>
+
+        {/* Review Form */}
+        <div className="mt-6 sm:mt-8">
+          {/* Rating Section */}
+          <div className="mb-6">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
+              Your Rating*
+            </h3>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <span className="text-xs sm:text-sm text-gray-700 sm:mr-2">
+                Your Rating*
+              </span>
+              <div className="flex gap-1">
+                <StarIcon filled={false} />
+                <StarIcon filled={false} />
+                <StarIcon filled={false} />
+                <StarIcon filled={false} />
+                <StarIcon filled={false} />
+              </div>
+            </div>
+          </div>
+
+          {/* Name and Email */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6">
             <div>
-              <h3 className="font-semibold text-gray-900">Leslie Alexander</h3>
-              <p className="text-sm text-gray-500">
-                February 10, 2024 at 2:37 pm
-              </p>
+              <label className="block text-xs sm:text-sm font-medium text-gray-900 mb-2">
+                Your Name*
+              </label>
+              <input
+                type="text"
+                placeholder="Your Name"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              />
             </div>
-            <div className="flex gap-1">
-              <StarIcon filled={true} />
-              <StarIcon filled={true} />
-              <StarIcon filled={true} />
-              <StarIcon filled={true} />
-              <StarIcon filled={false} />
-            </div>
-          </div>
-          <p className="mt-3 text-gray-700 leading-relaxed">
-            Neque porro est qui dolorem ipsum quia quaed inventor veritatis et
-            quasi architecto var sed efficitur turpis gilla sed sit amet finibus
-            eros. Lorem Ipsum is simply dummy
-          </p>
-        </div>
-      </div>
-
-      {/* Review Form */}
-      <div className="mt-8">
-        {/* Rating Section */}
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Your Rating*
-          </h3>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-700 mr-2">Your Rating*</span>
-            <div className="flex gap-1">
-              <StarIcon filled={false} />
-              <StarIcon filled={false} />
-              <StarIcon filled={false} />
-              <StarIcon filled={false} />
-              <StarIcon filled={false} />
+            <div>
+              <label className="block text-xs sm:text-sm font-medium text-gray-900 mb-2">
+                Your Email*
+              </label>
+              <input
+                type="email"
+                placeholder="Your Email"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              />
             </div>
           </div>
-        </div>
 
-        {/* Name and Email */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-900 mb-2">
-              Your Name*
+          {/* Message */}
+          <div className="mb-6">
+            <label className="block text-xs sm:text-sm font-medium text-gray-900 mb-2">
+              Message*
             </label>
-            <input
-              type="text"
-              placeholder="Your Name"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            <textarea
+              placeholder="Write Message"
+              rows="5"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-900 mb-2">
-              Your Email*
-            </label>
+
+          {/* Terms Checkbox */}
+          <div className="flex items-start gap-2 mb-6">
             <input
-              type="email"
-              placeholder="Your Email"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              type="checkbox"
+              id="terms"
+              className="w-4 h-4 mt-0.5 text-primary border-gray-300 rounded focus:ring-primary"
             />
+            <label htmlFor="terms" className="text-xs sm:text-sm text-gray-700">
+              I Accept Your{" "}
+              <span className="text-primary hover:underline cursor-pointer">
+                Terms & Conditions
+              </span>
+            </label>
           </div>
-        </div>
 
-        {/* Message */}
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-900 mb-2">
-            Message*
-          </label>
-          <textarea
-            placeholder="Write Message"
-            rows="6"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none"
-          />
+          {/* Submit Button */}
+          <button className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-medium px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base rounded-full transition-colors">
+            Submit Now
+          </button>
         </div>
-
-        {/* Terms Checkbox */}
-        <div className="flex items-center gap-2 mb-6">
-          <input
-            type="checkbox"
-            id="terms"
-            className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
-          />
-          <label htmlFor="terms" className="text-sm text-gray-700">
-            I Accept Your{" "}
-            <span className="text-teal-600 hover:underline cursor-pointer">
-              Terms & Conditions
-            </span>
-          </label>
-        </div>
-
-        {/* Submit Button */}
-        <button className="bg-primary  text-white font-medium px-8 py-3 rounded-full transition-colors">
-          Submit Now
-        </button>
       </div>
     </div>
   );

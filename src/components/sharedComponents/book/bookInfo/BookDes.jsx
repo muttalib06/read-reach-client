@@ -3,7 +3,7 @@ import React from "react";
 const BookDes = ({ book }) => {
   return (
     <div>
-      <p className="text-gray-700 leading-relaxed">
+      <p className="text-gray-700 text-justify">
         {book.description} This book offers a meaningful and engaging reading
         experience designed to help readers explore new ideas, deepen their
         understanding, and enjoy the pleasure of learning. Whether you are a

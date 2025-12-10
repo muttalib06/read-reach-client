@@ -13,7 +13,7 @@ const BookAdditionalInfo = ({ book }) => {
     { label: "Shelf Number", value: book.shelfNumber },
   ];
   return (
-    <div className="w-full max-w-5xl mx-auto bg-white">
+    <div className="bg-white">
       <table className="w-full border-collapse">
         <tbody>
           {productInfo.map((item, index) => (
