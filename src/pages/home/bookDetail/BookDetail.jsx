@@ -11,6 +11,7 @@ import { useParams } from "react-router";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Spinner from "../../../components/sharedComponents/spinner/Spinner";
 import ServerError from "../../../components/sharedComponents/Error/ServerError";
+import BookDetailTap from "../../../components/sharedComponents/book/BookDetailTap";
 const BookDetail = () => {
   const axiosSecure = useAxiosSecure();
   const { id } = useParams();
@@ -45,7 +46,7 @@ const BookDetail = () => {
     );
   }
   return (
-    <div className="min-h-screen rounded-sm bg-gray-50 p-8">
+    <div className="rounded-sm bg-gray-50 p-8">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Side - Book Image */}
@@ -53,7 +54,7 @@ const BookDetail = () => {
             <div className="w-full max-w-sm">
               <img
                 src={book.coverImage}
-                alt="Castle The Sky"
+                alt={book.title}
                 className="w-full h-auto rounded-lg shadow-lg"
               />
             </div>
@@ -114,7 +115,6 @@ const BookDetail = () => {
               {/* Add To Cart Button */}
               <button className="px-8 py-3 bg-primary text-white rounded-full font-semibold  transition">
                 Order Now
-            
               </button>
 
               {/* Wishlist Button */}
@@ -190,6 +190,13 @@ const BookDetail = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* tap menu */}
+
+      <div className="mt-20">
+        <BookDetailTap book={book}></BookDetailTap>
+     
       </div>
     </div>
   );
