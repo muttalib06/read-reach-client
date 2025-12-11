@@ -7,6 +7,8 @@ import LoginPage from "../pages/auth/LoginPage";
 import SignupPage from "../pages/auth/SignupPage";
 import PrivateRoute from "./PrivateRoute";
 import BookDetail from "../pages/home/bookDetail/BookDetail";
+import DashboardHome from "../pages/dashboard/DashboardHome";
+import MyOrders from "../pages/dashboard/MyOrders";
 
 export const router = createBrowserRouter([
   {
@@ -30,9 +32,9 @@ export const router = createBrowserRouter([
         element: <SignupPage></SignupPage>,
       },
       {
-        path:"book-detail/:id",
-        element:<BookDetail></BookDetail>
-      }
+        path: "book-detail/:id",
+        element: <BookDetail></BookDetail>,
+      },
     ],
   },
 
@@ -43,5 +45,16 @@ export const router = createBrowserRouter([
         <DashboardLayout></DashboardLayout>
       </PrivateRoute>
     ),
+
+    children: [
+      {
+        index: true,
+        element: <DashboardHome></DashboardHome>,
+      },
+      {
+        path: "orders",
+        element: <MyOrders></MyOrders>,
+      },
+    ],
   },
 ]);

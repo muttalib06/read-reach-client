@@ -8,14 +8,11 @@ import ServerError from "../../../components/sharedComponents/Error/ServerError"
 import BookDetailTap from "../../../components/sharedComponents/book/BookDetailTap";
 import { Box, Modal, Typography } from "@mui/material";
 import { ShoppingCart } from "lucide-react";
-import {
-  FaTimes,
-  FaShoppingCart,
-  FaUser,
-  FaEnvelope,
-  FaPhone,
-  FaMapMarkerAlt,
-} from "react-icons/fa";
+import { CgUnavailable } from "react-icons/cg";
+import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
+import useAuth from "../../../hooks/useAuth";
+import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
 
 const style = {
   position: "absolute",
@@ -47,10 +44,11 @@ const style = {
 };
 
 const BookDetail = () => {
-  const axiosSecure = useAxiosSecure();
+  const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const axiosSecure = useAxiosSecure();
 
   // order modal state management;
 
@@ -60,6 +58,50 @@ const BookDetail = () => {
   const [count, setCount] = useState(0);
 
   const { id } = useParams();
+
+  // order form management;
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  // send the order data to database;
+
+  const handleOrder = async (data) => {
+    const orderInfo = {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      address: data.address,
+      createdAt: new Date(),
+      bookName: book.title,
+      price: book.price,
+      payment: "unpaid",
+      status: "pending",
+    };
+
+    try {
+      const res = await axiosSecure.post("/order", orderInfo);
+      if (res.data.insertedId) {
+        reset();
+        handleOrderClose();
+        Swal.fire({
+          title: "Order submitted successfully",
+          icon: "success",
+          draggable: true,
+        });
+      }
+    } catch {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
+    }
+  };
 
   const {
     data: book,
@@ -72,6 +114,8 @@ const BookDetail = () => {
       return res.data;
     },
   });
+
+  // send order data to database
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -118,7 +162,7 @@ const BookDetail = () => {
                     : "text-red-500 font-semibold text-base sm:text-lg"
                 } inline-block`}
               >
-                {book.status}
+                {book?.status}
               </span>
             </div>
 
@@ -178,11 +222,19 @@ const BookDetail = () => {
 
               {/* Add To Cart Button */}
               <button
+                disabled={book.status === "available" ? false : true}
                 onClick={handleOrderOpen}
                 className="group px-5 sm:px-8 py-2 sm:py-3 bg-primary text-white rounded-full font-semibold transition-all duration-300 text-sm sm:text-base whitespace-nowrap hover:bg-primary/90 hover:shadow-lg hover:scale-105 flex items-center gap-2"
               >
-                <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:scale-110" />
-                <span>Order Now</span>
+                {book.status === "available" ? (
+                  <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:scale-110" />
+                ) : (
+                  <CgUnavailable className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:scale-110" />
+                )}
+
+                <span>
+                  {book.status === "available" ? "Order Now" : "Can't Order"}
+                </span>
               </button>
 
               {/* Wishlist Button */}
@@ -387,11 +439,12 @@ const BookDetail = () => {
                 mb: 2,
               }}
             >
-              {book.title}
+              Order Now
             </Typography>
 
             <Typography
               id="modal-modal-description"
+              component="div"
               sx={{
                 mt: 2,
                 fontSize: { xs: "0.875rem", sm: "0.95rem", md: "1rem" },
@@ -400,24 +453,30 @@ const BookDetail = () => {
               }}
             >
               {/* Form */}
-              <div className="p-4 space-y-3">
+              <form
+                onSubmit={handleSubmit(handleOrder)}
+                className="p-4 space-y-3"
+              >
                 {/* Name (Readonly) */}
                 <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
                   <FaUser className="text-gray-400" />
                   <input
                     type="text"
-                    value="John Doe"
+                    {...register("name")}
+                    value={user?.displayName}
                     readOnly
                     className="flex-1 bg-transparent text-sm text-gray-600 outline-none"
                   />
                 </div>
 
-                {/* Email (Readonly) */}
+                {/*  Email (Readonly) */}
+                {/*  Email readonly  */}
                 <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
                   <FaEnvelope className="text-gray-400" />
                   <input
                     type="email"
-                    value="john@example.com"
+                    {...register("email")}
+                    value={user?.email}
                     readOnly
                     className="flex-1 bg-transparent text-sm text-gray-600 outline-none"
                   />
@@ -428,26 +487,44 @@ const BookDetail = () => {
                   <FaPhone className="text-gray-400" />
                   <input
                     type="tel"
+                    {...register("phone", {
+                      required: "Phone number is required",
+                    })}
                     placeholder="Phone Number *"
                     className="flex-1 text-sm outline-none"
                   />
                 </div>
+                {errors.phone && (
+                  <p className="text-red-500 text-sm">{errors.phone.message}</p>
+                )}
 
                 {/* Address */}
                 <div className="flex items-start gap-2 p-3 border-2 border-gray-200 rounded-lg focus-within:border-orange-500 transition">
                   <FaMapMarkerAlt className="text-gray-400 mt-1" />
                   <textarea
                     placeholder="Delivery Address *"
+                    {...register("address", {
+                      required: "Address is required",
+                    })}
                     rows="2"
                     className="flex-1 text-sm outline-none resize-none"
                   />
                 </div>
+                {errors.address && (
+                  <p className="text-red-500 text-sm">
+                    {errors.address.message}
+                  </p>
+                )}
 
                 {/* Submit Button */}
-                <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 rounded-lg shadow-md transition-all duration-200 hover:shadow-lg">
+                <button
+                  // onClick={handleOrderClose}
+                  type="submit"
+                  className=" btn bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 rounded-lg shadow-md transition-all duration-200 hover:shadow-lg"
+                >
                   Place Order
                 </button>
-              </div>
+              </form>
             </Typography>
           </Box>
         </Modal>
