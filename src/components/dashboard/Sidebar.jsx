@@ -63,7 +63,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <NavLink
                 key={item.label}
                 to={item.path}
-                onClick={() => setActiveItem(item.label)}
+                onClick={() => {
+                  setActiveItem(item.label);
+                  setIsOpen(false);
+                }}
                 className={`w-full text-white flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                   isActive
                     ? "bg-white"

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { AiOutlineHeart, AiOutlineShareAlt } from "react-icons/ai";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Spinner from "../../../components/sharedComponents/spinner/Spinner";
 import ServerError from "../../../components/sharedComponents/Error/ServerError";
@@ -56,6 +56,8 @@ const BookDetail = () => {
   const handleOrderOpen = () => setOpenOrder(true);
   const handleOrderClose = () => setOpenOrder(false);
   const [count, setCount] = useState(0);
+
+  const navigate = useNavigate();
 
   const { id } = useParams();
 
@@ -121,16 +123,14 @@ const BookDetail = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  if (isLoading) {
-    return <Spinner></Spinner>;
-  }
+  useEffect(() => {
+    if (error) {
+      navigate("/server-error");
+    }
+  }, [error, navigate]);
 
-  if (error) {
-    return (
-      <div className="min-h-screen">
-        <ServerError code={error.status}></ServerError>
-      </div>
-    );
+  if (isLoading) {
+    return<Spinner></Spinner>;
   }
 
   return (

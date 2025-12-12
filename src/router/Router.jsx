@@ -9,11 +9,15 @@ import PrivateRoute from "./PrivateRoute";
 import BookDetail from "../pages/home/bookDetail/BookDetail";
 import DashboardHome from "../pages/dashboard/DashboardHome";
 import MyOrders from "../pages/dashboard/MyOrders";
+import RouterError from "../components/sharedComponents/Error/RouterError";
+import ServerError from "../components/sharedComponents/Error/ServerError";
+import PaymentSuccess from "../pages/payment/PaymentSuccess";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout></MainLayout>,
+    errorElement:<RouterError></RouterError>,
     children: [
       {
         index: true,
@@ -37,6 +41,22 @@ export const router = createBrowserRouter([
       },
     ],
   },
+
+  // server error page
+
+  {
+    path:"server-error",
+    element:<ServerError></ServerError>
+
+  },
+
+  // payment success page
+
+  {
+    path:"dashboard/success",
+    element:<PaymentSuccess></PaymentSuccess>
+  },
+
 
   {
     path: "dashboard",

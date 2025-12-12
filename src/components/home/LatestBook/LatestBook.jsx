@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Book from "../../sharedComponents/book/Book";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Spinner from "../../sharedComponents/spinner/Spinner";
-import ServerError from "../../sharedComponents/Error/ServerError";
+import { useNavigate } from "react-router";
 
 const LatestBook = () => {
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
   const {
     isLoading,
     data: books = [],
@@ -18,11 +19,15 @@ const LatestBook = () => {
       return res.data;
     },
   });
+
+  useEffect(() => {
+    if (error) {
+      navigate("/server-error");
+    }
+  }, [error, navigate]);
+
   if (isLoading) {
     return <Spinner></Spinner>;
-  }
-  if (error) {
-    return <ServerError code={error.status}></ServerError>;
   }
   return (
     <div className="mt-10">

@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router";
 
 const RouterError = () => {
   return (
@@ -15,9 +16,9 @@ const RouterError = () => {
         </p>
 
         {/* Button */}
-        <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded text-sm font-medium transition-colors duration-200">
+        <NavLink to="/" className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded text-sm font-medium transition-colors duration-200">
           GO TO HOMEPAGE
-        </button>
+        </NavLink>
       </div>
     </div>
   );

@@ -13,18 +13,15 @@ const Navbar = () => {
     try {
       await logOut();
       Swal.fire({
-        position: "top-end",
+        title: "Logout Successfully",
         icon: "success",
-        title: "You are Logout",
-        showConfirmButton: false,
-        timer: 1500,
+        draggable: true,
       });
-    } catch{
+    } catch {
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: "Something went wrong!",
-      
       });
     }
   };
@@ -156,7 +153,10 @@ const Navbar = () => {
           </NavLink>
 
           {user ? (
-            <button onClick={handleSignOut} className="btn bg-primary font-semibold text-white">
+            <button
+              onClick={handleSignOut}
+              className="btn bg-primary font-semibold text-white"
+            >
               Sign Out
             </button>
           ) : (

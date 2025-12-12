@@ -2,7 +2,7 @@ import React from "react";
 
 const ServerError = ({code}) => {
   return (
-    <div className="flex items-center justify-center p-4">
+    <div className="flex min-h-screen items-center justify-center p-4">
       <div className="text-center max-w-md">
         {/* Icon */}
         <div className="flex justify-center mb-6">

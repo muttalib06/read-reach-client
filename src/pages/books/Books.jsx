@@ -2,12 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useEffect } from "react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Spinner from "../../components/sharedComponents/spinner/Spinner";
-import ServerError from "../../components/sharedComponents/Error/ServerError";
 import Book from "../../components/sharedComponents/book/Book";
 import { Pagination } from "@mui/material";
+import { useNavigate } from "react-router";
 
 const Books = () => {
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
   const {
     data: books = [],
     isLoading,
@@ -21,20 +22,17 @@ const Books = () => {
   });
 
   useEffect(() => {
-    window.scrollTo(0,0)
+    window.scrollTo(0, 0);
+  }, []);
 
-  },[])
+  useEffect(() => {
+    if (error) {
+      navigate("/server-error");
+    }
+  }, [error, navigate]);
 
   if (isLoading) {
     return <Spinner></Spinner>;
-  }
-
-  if (error) {
-    return (
-      <div className="h-screen">
-        <ServerError code={error.status}></ServerError>
-      </div>
-    );
   }
 
   return (
@@ -48,9 +46,9 @@ const Books = () => {
 
       {/* all books */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-        {
-          books.map(book =><Book key={book._id} book={book}></Book>)
-        }
+        {books.map((book) => (
+          <Book key={book._id} book={book}></Book>
+        ))}
       </div>
 
       <div className="my-8 flex justify-center items-center">
