@@ -28,7 +28,6 @@ const MyOrders = () => {
       return res.data;
     },
   });
-  console.log(orders);
 
   // handle payment;
 
@@ -42,13 +41,41 @@ const MyOrders = () => {
 
     try {
       const res = await axiosSecure.post("/create-checkout-session", orderInfo);
-      window.location.replace(res.data.url)
+      window.location.replace(res.data.url);
     } catch {
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: "Something went wrong!",
       });
+    }
+  };
+
+  // handle delete order
+  const handleDelete = async (orderId) => {
+    try {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, cancel it!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const res = await axiosSecure.patch(`/order-status/${orderId}`);
+          if (res.deletedCount) {
+            Swal.fire({
+              title: "Cancelled!",
+              text: "Your order has been cancelled.",
+              icon: "success",
+            });
+          }
+        }
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -88,9 +115,6 @@ const MyOrders = () => {
     }
   };
 
-  const totalOrders = orders.length;
-  const totalAmount = orders.reduce((sum, order) => sum + order.price, 0);
-
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100">
       <div>
@@ -105,7 +129,7 @@ const MyOrders = () => {
         </div>
 
         {/* Desktop Table View - Hidden on Mobile/Tablet */}
-        <div className="hidden lg:block bg-white rounded-xl overflow-hidden border border-slate-200">
+        <div className="hidden lg:block shadow bg-white rounded-xl overflow-hidden border border-slate-200">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -142,7 +166,7 @@ const MyOrders = () => {
                     }`}
                   >
                     <td className="px-6 py-4 text-sm font-medium text-slate-900">
-                      #{order._id.slice(-6)}
+                      {order._id}
                     </td>
                     <td className="px-6 py-4 text-sm text-slate-600">
                       {new Date(order.createdAt).toLocaleDateString("en-US", {
@@ -177,15 +201,27 @@ const MyOrders = () => {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-center gap-2">
-                        <button
-                          onClick={() => handlePayment(order)}
-                          className="p-2 btn bg-primary  rounded-lg transition-colors"
-                          title="View"
-                        >
-                          <FaAmazonPay className="text-2xl text-white" />
-                        </button>
                         {order.status === "pending" && (
                           <button
+                            onClick={() => handlePayment(order)}
+                            className="p-2 btn bg-primary  rounded-lg transition-colors"
+                            title="View"
+                          >
+                            <FaAmazonPay className="text-2xl text-white" />
+                          </button>
+                        )}
+
+                        {/* when no action needed */}
+
+                        {order.status !== "pending" && (
+                          <button disabled="true" className="btn">
+                            No Action Needed
+                          </button>
+                        )}
+
+                        {order.status === "pending" && (
+                          <button
+                            onClick={() => handleDelete(order._id)}
                             className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors btn"
                             title="Delete"
                           >
@@ -198,22 +234,6 @@ const MyOrders = () => {
                 ))}
               </tbody>
             </table>
-          </div>
-
-          {/* Footer */}
-          <div className="bg-slate-50 px-6 py-4 border-t border-slate-200">
-            <div className="flex items-center justify-between text-sm text-slate-600">
-              <span>
-                Total Orders:{" "}
-                <span className="font-bold text-slate-900">{totalOrders}</span>
-              </span>
-              <span className="font-medium">
-                Total Amount:{" "}
-                <span className="font-bold text-slate-900">
-                  ${totalAmount.toFixed(2)}
-                </span>
-              </span>
-            </div>
           </div>
         </div>
 
@@ -285,40 +305,27 @@ const MyOrders = () => {
 
               {/* Action Buttons */}
               <div className="grid grid-cols-3 gap-2 sm:gap-3">
-                <button
-                  onClick={() => handlePayment(order)}
-                  className="px-3 py-2 sm:py-2.5 bg-primary text-white text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5"
-                >
-                  <FaAmazonPay className="text-2xl text-white" />
-                  <span className="hidden sm:inline">View</span>
-                </button>
-                <button className="px-3 py-2 sm:py-2.5 text-red-500 text-xs sm:text-sm font-medium rounded-lg btn transition-colors flex items-center justify-center gap-1.5">
-                  <MdCancelPresentation className="text-2xl" />
-                  <span className="hidden sm:inline">Delete</span>
-                </button>
+                {order.status === "pending" && (
+                  <button
+                    onClick={() => handlePayment(order)}
+                    className="px-3 py-2 sm:py-2.5 bg-primary text-white text-xs sm:text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5"
+                  >
+                    <FaAmazonPay className="text-2xl text-white" />
+                    <span className="hidden sm:inline">View</span>
+                  </button>
+                )}
+
+                {order.status === "pending" && (
+                  <button
+                    onClick={() => handleDelete(order._id)}
+                    className="px-3 py-2 sm:py-2.5 text-red-500 text-xs sm:text-sm font-medium rounded-lg btn transition-colors flex items-center justify-center gap-1.5"
+                  >
+                    <MdCancelPresentation className="text-2xl" />
+                  </button>
+                )}
               </div>
             </div>
           ))}
-
-          {/* Mobile Footer Summary */}
-          <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-4 sm:p-5">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-sm sm:text-base">
-                <span className="text-slate-600 font-medium">
-                  Total Orders:
-                </span>
-                <span className="font-bold text-slate-900">{totalOrders}</span>
-              </div>
-              <div className="flex items-center justify-between text-sm sm:text-base pt-2 border-t border-slate-200">
-                <span className="text-slate-600 font-medium">
-                  Total Amount:
-                </span>
-                <span className="font-bold text-slate-900 text-lg">
-                  ${totalAmount.toFixed(2)}
-                </span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

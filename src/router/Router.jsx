@@ -12,12 +12,13 @@ import MyOrders from "../pages/dashboard/MyOrders";
 import RouterError from "../components/sharedComponents/Error/RouterError";
 import ServerError from "../components/sharedComponents/Error/ServerError";
 import PaymentSuccess from "../pages/payment/PaymentSuccess";
+import PaymentHistory from "../pages/payment/PaymentHistory";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout></MainLayout>,
-    errorElement:<RouterError></RouterError>,
+    errorElement: <RouterError></RouterError>,
     children: [
       {
         index: true,
@@ -45,18 +46,16 @@ export const router = createBrowserRouter([
   // server error page
 
   {
-    path:"server-error",
-    element:<ServerError></ServerError>
-
+    path: "server-error",
+    element: <ServerError></ServerError>,
   },
 
   // payment success page
 
   {
-    path:"dashboard/success",
-    element:<PaymentSuccess></PaymentSuccess>
+    path: "dashboard/success",
+    element: <PaymentSuccess></PaymentSuccess>,
   },
-
 
   {
     path: "dashboard",
@@ -68,12 +67,20 @@ export const router = createBrowserRouter([
 
     children: [
       {
-        index: true,
+        index:true,
         element: <DashboardHome></DashboardHome>,
       },
       {
         path: "orders",
         element: <MyOrders></MyOrders>,
+      },
+      {
+        path: "payment-history",
+        element: <PaymentHistory></PaymentHistory>,
+      },
+      {
+        path: "success",
+        element: <PaymentSuccess></PaymentSuccess>,
       },
     ],
   },

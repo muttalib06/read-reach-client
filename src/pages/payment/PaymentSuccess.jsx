@@ -1,23 +1,46 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useSearchParams } from "react-router";
+import { NavLink, useNavigate, useSearchParams } from "react-router";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { GrTransaction } from "react-icons/gr";
+import Spinner from "../../components/sharedComponents/spinner/Spinner";
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
   const [animationComplete, setAnimationComplete] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [sessionData, setSessionData] = useState();
+  const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
 
-  console.log(searchParams);
+  useEffect(() => {
+    const sessionId = searchParams.get("session_id");
+    if (sessionId) {
+      const handleVerifyPayment = async () => {
+        try {
+          const res = await axiosSecure.get(`/payment-status/${sessionId}`);
+          setSessionData(res.data);
+        } catch {
+          navigate("/server-error");
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      handleVerifyPayment();
+    } else {
+      setLoading(false);
+    }
+  }, [axiosSecure, navigate, searchParams]);
+
+  console.log(sessionData);
 
   useEffect(() => {
     setTimeout(() => setAnimationComplete(true), 500);
   }, []);
 
-  // Example data - replace with your actual data
-  const orderDetails = {
-    orderId: "ORD-BK2024-7X9Q",
-    amount: "49.99",
-    email: "reader@example.com",
-    deliveryDate: "Friday, December 15, 2024",
-  };
+  if (loading) {
+    return <Spinner></Spinner>;
+  }
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center p-2 sm:p-3">
@@ -67,7 +90,7 @@ const PaymentSuccess = () => {
               <p className="text-xs text-slate-600 wrap-break-words">
                 Confirmation sent to{" "}
                 <span className="font-semibold text-amber-600 break-all">
-                  {orderDetails.email}
+                  {sessionData?.customer_email}
                 </span>
               </p>
             </div>
@@ -97,7 +120,7 @@ const PaymentSuccess = () => {
                       Order ID
                     </p>
                     <p className="font-bold text-slate-800 text-xs truncate">
-                      {orderDetails.orderId}
+                      {sessionData?.metadata.orderId}
                     </p>
                   </div>
                 </div>
@@ -126,7 +149,7 @@ const PaymentSuccess = () => {
                       Paid
                     </p>
                     <p className="font-bold text-slate-800 text-xs">
-                      ${orderDetails.amount}
+                      ${sessionData?.amount_total}
                     </p>
                   </div>
                 </div>
@@ -137,38 +160,15 @@ const PaymentSuccess = () => {
             <div className="bg-linear-to-br from-amber-50 via-yellow-50 to-orange-50 rounded-lg p-2.5 mb-3 border border-amber-200">
               <div className="flex items-start gap-2">
                 <div className="w-8 h-8 bg-linear-to-br from-amber-500 to-amber-600 rounded flex items-center justify-center shrink-0">
-                  <svg
-                    className="w-4 h-4 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"
-                    />
-                  </svg>
+                  <GrTransaction />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-bold text-slate-800 text-xs sm:text-sm mb-0.5">
-                    Delivery: {orderDetails.deliveryDate}
-                  </h3>
-                  <div className="flex items-center gap-1 text-[10px] text-slate-600 bg-white/60 rounded px-1.5 py-0.5 border border-white/40">
-                    <svg
-                      className="w-3 h-3 text-emerald-500 shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="font-medium">Free delivery</span>
-                  </div>
+                  <p className="text-[10px] font-medium text-slate-500">
+                    Transaction ID
+                  </p>
+                  <p className="font-bold text-slate-800 text-xs">
+                    ${sessionData?.payment_intent}
+                  </p>
                 </div>
               </div>
             </div>
@@ -222,7 +222,7 @@ const PaymentSuccess = () => {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-2 mb-2.5">
               <NavLink
-                to="/orders"
+                to="/dashboard/orders"
                 className="w-full sm:flex-1 bg-linear-to-r from-amber-500 to-amber-600 text-white font-bold py-2 px-3 rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1 text-xs"
               >
                 <svg

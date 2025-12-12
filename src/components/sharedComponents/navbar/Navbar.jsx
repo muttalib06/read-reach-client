@@ -56,7 +56,9 @@ const Navbar = () => {
           <li>
             <NavLink
               to="/"
-              className={({ isActive }) => (isActive ? "text-primary" : "")}
+              className={({ isActive }) =>
+                `hover:text-primary ${isActive ? "text-primary" : ""}`
+              }
             >
               Home
             </NavLink>
@@ -64,7 +66,9 @@ const Navbar = () => {
           <li>
             <NavLink
               to="/books"
-              className={({ isActive }) => (isActive ? "text-primary" : "")}
+              className={({ isActive }) =>
+                `hover:text-primary ${isActive ? "text-primary" : ""}`
+              }
             >
               Books
             </NavLink>
@@ -72,7 +76,9 @@ const Navbar = () => {
           <li>
             <NavLink
               to="/dashboard"
-              className={({ isActive }) => (isActive ? "text-primary" : "")}
+              className={({ isActive }) =>
+                `hover:text-primary ${isActive ? "text-primary" : ""}`
+              }
             >
               Dashboard
             </NavLink>
