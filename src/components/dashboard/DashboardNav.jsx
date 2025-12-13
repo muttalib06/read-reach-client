@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Menu, Settings, LogOut, User, Bell } from "lucide-react";
 import useAuth from "../../hooks/useAuth";
+import { NavLink } from "react-router";
 
 const DashboardNav = ({ setIsSidebarOpen }) => {
   const { user } = useAuth();
@@ -56,12 +57,14 @@ const DashboardNav = ({ setIsSidebarOpen }) => {
                   <p className="text-sm font-semibold text-gray-800">
                     {user?.displayName}
                   </p>
-                  <p className="text-xs text-gray-500">{user?.email}</p>
+                  <p className="text-[.6rem] font-bold text-gray-500">{user?.email}</p>
                 </div>
-                <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 flex items-center gap-2">
-                  <User className="w-4 h-4" />
-                  Profile
-                </button>
+       
+                  <NavLink to="/dashboard/profile" className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 flex items-center gap-2">
+                    <User className="w-4 h-4" />
+                    Profile
+                  </NavLink>
+            
                 <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 flex items-center gap-2">
                   <Settings className="w-4 h-4" />
                   Settings
@@ -83,4 +86,3 @@ const DashboardNav = ({ setIsSidebarOpen }) => {
 };
 
 export default DashboardNav;
-;

@@ -1,31 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router";
+import Spinner from "../../components/sharedComponents/spinner/Spinner";
+import useAuth from "../../hooks/useAuth";
 
 const PaymentHistory = () => {
-  const orders = [
-    {
-      id: "#199453",
-      date: "Dec 10, 2025",
-      bookName: "To Kill a Mockingbird",
-      price: "$18.99",
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
+
+  const {
+    data: payments = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["payments"],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/payments?email=${user.email}`);
+      return res.data;
     },
-    {
-      id: "#199454",
-      date: "Dec 10, 2025",
-      bookName: "Effective Java",
-      price: "$54.99",
-    },
-    {
-      id: "#a09d11",
-      date: "Dec 11, 2025",
-      bookName: "Effective Java",
-      price: "$54.99",
-    },
-  ];
+  });
+
+  useEffect(() => {
+    if (error) {
+      navigate("/server-error");
+    }
+  }, [navigate, error]);
+
+  if (isLoading) {
+    return <Spinner></Spinner>;
+  }
   return (
     <div className="w-full max-w-6xl mx-auto p-4">
       <div className="mb-4">
         <h1 className="text-xl sm:text-2xl font-bold text-slate-800 mb-2">
-          Transaction History
+          Transaction History ({payments.length})
         </h1>
       </div>
       {/* Desktop Table View */}
@@ -34,33 +44,36 @@ const PaymentHistory = () => {
           <thead className="bg-slate-800 text-white">
             <tr>
               <th className="px-6 py-4 text-left text-sm font-semibold">
-                Order ID
-              </th>
-              <th className="px-6 py-4 text-left text-sm font-semibold">
-                Order Date
+                Transaction ID
               </th>
               <th className="px-6 py-4 text-left text-sm font-semibold">
                 Book Name
               </th>
               <th className="px-6 py-4 text-left text-sm font-semibold">
-                Price
+                Payment Date
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold">
+                Amount
               </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {orders.map((order, index) => (
-              <tr key={index} className="hover:bg-gray-50 transition-colors">
+            {payments.map((payment) => (
+              <tr
+                key={payment._id}
+                className="hover:bg-gray-50 transition-colors"
+              >
                 <td className="px-6 py-5 text-sm text-gray-900 font-medium">
-                  {order.id}
+                  {payment.transactionId}
                 </td>
                 <td className="px-6 py-5 text-sm text-gray-600">
-                  {order.date}
+                  {payment.bookName}
                 </td>
                 <td className="px-6 py-5 text-sm text-gray-900">
-                  {order.bookName}
+                  {new Date(payment.createdAt).toLocaleString()}
                 </td>
                 <td className="px-6 py-5 text-sm text-gray-900 font-semibold">
-                  {order.price}
+                  $ {payment.amount}
                 </td>
               </tr>
             ))}
@@ -70,41 +83,47 @@ const PaymentHistory = () => {
 
       {/* Mobile Card View */}
       <div className="md:hidden space-y-4">
-        {orders.map((order, index) => (
+        {payments.map((payment) => (
           <div
-            key={index}
+            key={payment._id}
             className="bg-white rounded-lg shadow-lg p-4 border border-gray-200"
           >
             <div className="flex justify-between items-start mb-3">
               <div>
                 <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
-                  Order ID
+                  Transaction ID
                 </p>
-                <p className="text-sm font-semibold text-gray-900">
-                  {order.id}
+                <p className="text-[.6rem] font-semibold text-gray-900">
+                  {payment.transactionId}
                 </p>
               </div>
               <div className="text-right">
                 <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
-                  Price
+                  Book Name
                 </p>
-                <p className="text-lg font-bold text-gray-900">{order.price}</p>
+                <p className="text-lg font-bold text-gray-900">
+                  {" "}
+                  {payment.bookName}
+                </p>
               </div>
             </div>
 
             <div className="border-t border-gray-200 pt-3 space-y-2">
               <div>
                 <p className="text-xs text-gray-500 uppercase tracking-wide">
-                  Order Date
+                  Payment Date
                 </p>
-                <p className="text-sm text-gray-700">{order.date}</p>
+                <p className="text-sm text-gray-700">
+                  {" "}
+                  {new Date(payment.createdAt).toLocaleString()}
+                </p>
               </div>
               <div>
                 <p className="text-xs text-gray-500 uppercase tracking-wide">
-                  Book Name
+                  Amount
                 </p>
                 <p className="text-sm text-gray-900 font-medium">
-                  {order.bookName}
+                  {payment.amount}
                 </p>
               </div>
             </div>

@@ -13,6 +13,7 @@ import RouterError from "../components/sharedComponents/Error/RouterError";
 import ServerError from "../components/sharedComponents/Error/ServerError";
 import PaymentSuccess from "../pages/payment/PaymentSuccess";
 import PaymentHistory from "../pages/payment/PaymentHistory";
+import ProfilePage from "../pages/dashboard/ProfilePage";
 
 export const router = createBrowserRouter([
   {
@@ -82,6 +83,10 @@ export const router = createBrowserRouter([
         path: "success",
         element: <PaymentSuccess></PaymentSuccess>,
       },
+      {
+        path:"profile",
+        element:<ProfilePage></ProfilePage>
+      }
     ],
   },
 ]);

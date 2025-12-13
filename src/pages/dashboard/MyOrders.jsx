@@ -21,6 +21,7 @@ const MyOrders = () => {
     data: orders = [],
     isLoading,
     error,
+    refetch,
   } = useQuery({
     queryKey: ["orders", user?.email],
     queryFn: async () => {
@@ -54,7 +55,7 @@ const MyOrders = () => {
   // handle delete order
   const handleDelete = async (orderId) => {
     try {
-      Swal.fire({
+      const result = await Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
         icon: "warning",
@@ -62,20 +63,27 @@ const MyOrders = () => {
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "Yes, cancel it!",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          const res = await axiosSecure.patch(`/order-status/${orderId}`);
-          if (res.deletedCount) {
-            Swal.fire({
-              title: "Cancelled!",
-              text: "Your order has been cancelled.",
-              icon: "success",
-            });
-          }
-        }
       });
+
+      if (result.isConfirmed) {
+        const res = await axiosSecure.patch(`/order-status/${orderId}`);
+        // check for successful response
+        if (res.data.modifiedCount) {
+          refetch();
+          Swal.fire({
+            title: "Cancelled!",
+            text: "Your order has been cancelled.",
+            icon: "success",
+          });
+        }
+      }
     } catch (error) {
-      console.log(error);
+      console.error("Error cancelling order:", error);
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to cancel the order. Please try again.",
+        icon: "error",
+      });
     }
   };
 
@@ -121,7 +129,7 @@ const MyOrders = () => {
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-xl sm:text-2xl font-bold text-slate-800 mb-2">
-            Order Management
+            Orders ({orders.length})
           </h1>
           <p className="text-sm sm:text-base text-slate-600">
             Track and manage your book orders
