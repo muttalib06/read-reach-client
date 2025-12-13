@@ -14,6 +14,7 @@ import ServerError from "../components/sharedComponents/Error/ServerError";
 import PaymentSuccess from "../pages/payment/PaymentSuccess";
 import PaymentHistory from "../pages/payment/PaymentHistory";
 import ProfilePage from "../pages/dashboard/ProfilePage";
+import AddBookForm from "../pages/dashboard/AddBookForm";
 
 export const router = createBrowserRouter([
   {
@@ -86,6 +87,10 @@ export const router = createBrowserRouter([
       {
         path:"profile",
         element:<ProfilePage></ProfilePage>
+      },
+      {
+        path:"add-book",
+        element:<AddBookForm></AddBookForm>
       }
     ],
   },
