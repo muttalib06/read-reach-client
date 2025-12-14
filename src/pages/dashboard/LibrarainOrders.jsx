@@ -10,6 +10,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
+import Spinner from "../../components/sharedComponents/spinner/Spinner";
 
 const LibrarianOrders = () => {
   const { user } = useAuth();
@@ -75,6 +76,8 @@ const LibrarianOrders = () => {
 
   const [openDropdown, setOpenDropdown] = useState(null);
 
+  console.log(orders)
+
 
 //   status config;
 
@@ -124,14 +127,14 @@ const LibrarianOrders = () => {
     "cancelled",
   ];
 
-  const handleStatusChange = (orderId, newStatus) => {
-    setOrders(
-      orders.map((order) =>
-        order.id === orderId ? { ...order, status: newStatus } : order
-      )
-    );
-    setOpenDropdown(null);
-  };
+//   const handleStatusChange = (orderId, newStatus) => {
+//     setOrders(
+//       orders.map((order) =>
+//         order.id === orderId ? { ...order, status: newStatus } : order
+//       )
+//     );
+//     setOpenDropdown(null);
+//   };
 
   const StatusBadge = ({ status }) => {
     const config = statusConfig[status];
@@ -146,9 +149,13 @@ const LibrarianOrders = () => {
     );
   };
 
+  if(isLoading){
+        return <Spinner></Spinner>
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className=" bg-gray-50 p-4 md:p-6 lg:p-8">
+      <div>
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
@@ -166,9 +173,6 @@ const LibrarianOrders = () => {
             <table className="w-full">
               <thead>
                 <tr className="bg-[#2d3e50] text-white">
-                  <th className="px-6 py-4 text-left text-sm font-semibold">
-                    Order ID
-                  </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">
                     Order Date
                   </th>
@@ -189,17 +193,12 @@ const LibrarianOrders = () => {
               <tbody className="divide-y divide-gray-200">
                 {orders.map((order) => (
                   <tr
-                    key={order.id}
+                    key={order._id}
                     className="hover:bg-gray-50 transition-colors"
                   >
                     <td className="px-6 py-4">
-                      <span className="text-sm font-mono text-gray-600">
-                        {order.id.substring(0, 12)}...
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
                       <span className="text-sm text-gray-700">
-                        {order.date}
+                        {new Date(order.createdAt).toLocaleString()}
                       </span>
                     </td>
                     <td className="px-6 py-4">
@@ -216,7 +215,7 @@ const LibrarianOrders = () => {
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-sm font-semibold text-gray-900">
-                        {order.price}
+                        $ {order.price}
                       </span>
                     </td>
                     <td className="px-6 py-4">
@@ -249,9 +248,6 @@ const LibrarianOrders = () => {
                               return (
                                 <button
                                   key={status}
-                                  onClick={() =>
-                                    handleStatusChange(order.id, status)
-                                  }
                                   className={`w-full px-4 py-2.5 text-left hover:bg-gray-50 transition-colors flex items-center gap-2 ${config.color}`}
                                 >
                                   <Icon size={16} />
@@ -288,12 +284,9 @@ const LibrarianOrders = () => {
                     <h3 className="font-semibold text-gray-900 mb-1 truncate">
                       {order.bookName}
                     </h3>
-                    <p className="text-xs text-gray-500 mb-2">
-                      Order: {order.id.substring(0, 16)}...
-                    </p>
-                    <p className="text-sm text-gray-600 mb-2">{order.date}</p>
+                    <p className="text-sm text-gray-600 mb-2">{new Date(order.createdAt).toLocaleString()}</p>
                     <p className="text-lg font-bold text-[#f3701d]">
-                      {order.price}
+                      $ {order.price}
                     </p>
                   </div>
                 </div>
@@ -330,8 +323,6 @@ const LibrarianOrders = () => {
                         const Icon = config.icon;
                         return (
                           <button
-                            key={status}
-                            onClick={() => handleStatusChange(order.id, status)}
                             className={`w-full px-4 py-2.5 text-left hover:bg-gray-50 transition-colors flex items-center gap-2 ${config.color}`}
                           >
                             <Icon size={16} />

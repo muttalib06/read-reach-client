@@ -61,6 +61,19 @@ const BookDetail = () => {
 
   const { id } = useParams();
 
+  // fetch book data from database;
+  const {
+    data: book,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["book", id],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/bookById/${id}`);
+      return res.data;
+    },
+  });
+
   // order form management;
 
   const {
@@ -81,6 +94,8 @@ const BookDetail = () => {
       createdAt: new Date(),
       bookName: book.title,
       price: book.price,
+      bookImage: book.coverImage,
+      librarian_email: book.librarian_email,
       payment: "unpaid",
       status: "pending",
     };
@@ -105,20 +120,6 @@ const BookDetail = () => {
     }
   };
 
-  const {
-    data: book,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["book", id],
-    queryFn: async () => {
-      const res = await axiosSecure.get(`/bookById/${id}`);
-      return res.data;
-    },
-  });
-
-  // send order data to database
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -130,7 +131,7 @@ const BookDetail = () => {
   }, [error, navigate]);
 
   if (isLoading) {
-    return<Spinner></Spinner>;
+    return <Spinner></Spinner>;
   }
 
   return (
