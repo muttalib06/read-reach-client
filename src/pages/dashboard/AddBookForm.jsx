@@ -9,30 +9,56 @@ import {
   Clock,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAuth from "../../hooks/useAuth";
+import Swal from "sweetalert2";
+
+// add book to the database
 
 const AddBookForm = () => {
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     // Convert string 'true'/'false' to boolean for deliveryAvailable and pickupAvailable
     const formattedData = {
       ...data,
-      deliveryAvailable: data.deliveryAvailable === 'true',
-      pickupAvailable: data.pickupAvailable === 'true',
+      deliveryAvailable: data.deliveryAvailable === "true",
+      pickupAvailable: data.pickupAvailable === "true",
       publishedYear: Number(data.publishedYear),
       pages: Number(data.pages),
       price: Number(data.price),
       availableCopies: Number(data.availableCopies),
       totalCopies: Number(data.totalCopies),
       rentalDays: Number(data.rentalDays),
-      lateFeePerDay: Number(data.lateFeePerDay)
+      lateFeePerDay: Number(data.lateFeePerDay),
+      librarian_email: user.email,
     };
     console.log(formattedData);
     // Handle form submission here
+    try {
+      const res = await axiosSecure.post("/add-book", formattedData);
+      if (res.data.insertedId) {
+        Swal.fire({
+          title: "Added Book Successfully",
+          icon: "success",
+          draggable: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
+    }
   };
 
   return (
@@ -52,7 +78,10 @@ const AddBookForm = () => {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-lg shadow-md p-6 sm:p-8">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="bg-white rounded-lg shadow-md p-6 sm:p-8"
+        >
           {/* Basic Information Section */}
           <div className="mb-8">
             <h2 className="text-xl font-semibold text-gray-800 mb-4 pb-2 border-b-2 border-[#ff7236]">
@@ -72,7 +101,9 @@ const AddBookForm = () => {
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff7236] focus:border-transparent outline-none transition"
                 />
                 {errors.isbn && (
-                  <p className="text-red-500 text-sm mt-1">{errors.isbn.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.isbn.message}
+                  </p>
                 )}
               </div>
 
@@ -88,7 +119,9 @@ const AddBookForm = () => {
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff7236] focus:border-transparent outline-none transition"
                 />
                 {errors.title && (
-                  <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.title.message}
+                  </p>
                 )}
               </div>
 
@@ -98,13 +131,17 @@ const AddBookForm = () => {
                   Author Name <span className="text-red-500">*</span>
                 </label>
                 <input
-                  {...register("author", { required: "Author name is required" })}
+                  {...register("author", {
+                    required: "Author name is required",
+                  })}
                   type="text"
                   placeholder="F. Scott Fitzgerald"
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff7236] focus:border-transparent outline-none transition"
                 />
                 {errors.author && (
-                  <p className="text-red-500 text-sm mt-1">{errors.author.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.author.message}
+                  </p>
                 )}
               </div>
 
@@ -127,7 +164,9 @@ const AddBookForm = () => {
                   Category <span className="text-red-500">*</span>
                 </label>
                 <select
-                  {...register("category", { required: "Category is required" })}
+                  {...register("category", {
+                    required: "Category is required",
+                  })}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff7236] focus:border-transparent outline-none transition bg-white"
                 >
                   <option value="">Select Category</option>
@@ -143,7 +182,9 @@ const AddBookForm = () => {
                   <option value="Self-Help">Self-Help</option>
                 </select>
                 {errors.category && (
-                  <p className="text-red-500 text-sm mt-1">{errors.category.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.category.message}
+                  </p>
                 )}
               </div>
 
@@ -162,7 +203,9 @@ const AddBookForm = () => {
                   <option value="reserved">Reserved</option>
                 </select>
                 {errors.status && (
-                  <p className="text-red-500 text-sm mt-1">{errors.status.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.status.message}
+                  </p>
                 )}
               </div>
 
@@ -173,7 +216,9 @@ const AddBookForm = () => {
                 </label>
                 <div className="relative">
                   <input
-                    {...register("coverImage", { required: "Cover image URL is required" })}
+                    {...register("coverImage", {
+                      required: "Cover image URL is required",
+                    })}
                     type="url"
                     placeholder="https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg"
                     className="w-full px-4 py-2.5 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff7236] focus:border-transparent outline-none transition"
@@ -181,7 +226,9 @@ const AddBookForm = () => {
                   <Upload className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                 </div>
                 {errors.coverImage && (
-                  <p className="text-red-500 text-sm mt-1">{errors.coverImage.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.coverImage.message}
+                  </p>
                 )}
               </div>
             </div>
@@ -200,13 +247,17 @@ const AddBookForm = () => {
                   Publisher <span className="text-red-500">*</span>
                 </label>
                 <input
-                  {...register("publisher", { required: "Publisher is required" })}
+                  {...register("publisher", {
+                    required: "Publisher is required",
+                  })}
                   type="text"
                   placeholder="Scribner"
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff7236] focus:border-transparent outline-none transition"
                 />
                 {errors.publisher && (
-                  <p className="text-red-500 text-sm mt-1">{errors.publisher.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.publisher.message}
+                  </p>
                 )}
               </div>
 
@@ -216,17 +267,22 @@ const AddBookForm = () => {
                   Published Year <span className="text-red-500">*</span>
                 </label>
                 <input
-                  {...register("publishedYear", { 
+                  {...register("publishedYear", {
                     required: "Published year is required",
                     min: { value: 1000, message: "Year must be at least 1000" },
-                    max: { value: new Date().getFullYear(), message: "Year cannot be in the future" }
+                    max: {
+                      value: new Date().getFullYear(),
+                      message: "Year cannot be in the future",
+                    },
                   })}
                   type="number"
                   placeholder="2004"
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff7236] focus:border-transparent outline-none transition"
                 />
                 {errors.publishedYear && (
-                  <p className="text-red-500 text-sm mt-1">{errors.publishedYear.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.publishedYear.message}
+                  </p>
                 )}
               </div>
 
@@ -237,14 +293,18 @@ const AddBookForm = () => {
                 </label>
                 <div className="relative">
                   <input
-                    {...register("publishedDate", { required: "Published date is required" })}
+                    {...register("publishedDate", {
+                      required: "Published date is required",
+                    })}
                     type="date"
                     className="w-full px-4 py-2.5 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff7236] focus:border-transparent outline-none transition"
                   />
                   <Calendar className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                 </div>
                 {errors.publishedDate && (
-                  <p className="text-red-500 text-sm mt-1">{errors.publishedDate.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.publishedDate.message}
+                  </p>
                 )}
               </div>
 
@@ -255,14 +315,18 @@ const AddBookForm = () => {
                 </label>
                 <div className="relative">
                   <input
-                    {...register("addedToLibraryDate", { required: "Added to library date is required" })}
+                    {...register("addedToLibraryDate", {
+                      required: "Added to library date is required",
+                    })}
                     type="date"
                     className="w-full px-4 py-2.5 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff7236] focus:border-transparent outline-none transition"
                   />
                   <Calendar className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                 </div>
                 {errors.addedToLibraryDate && (
-                  <p className="text-red-500 text-sm mt-1">{errors.addedToLibraryDate.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.addedToLibraryDate.message}
+                  </p>
                 )}
               </div>
 
@@ -272,7 +336,9 @@ const AddBookForm = () => {
                   Language <span className="text-red-500">*</span>
                 </label>
                 <select
-                  {...register("language", { required: "Language is required" })}
+                  {...register("language", {
+                    required: "Language is required",
+                  })}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff7236] focus:border-transparent outline-none transition bg-white"
                 >
                   <option value="">Select Language</option>
@@ -285,7 +351,9 @@ const AddBookForm = () => {
                   <option value="Arabic">Arabic</option>
                 </select>
                 {errors.language && (
-                  <p className="text-red-500 text-sm mt-1">{errors.language.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.language.message}
+                  </p>
                 )}
               </div>
 
@@ -295,16 +363,40 @@ const AddBookForm = () => {
                   Number of Pages <span className="text-red-500">*</span>
                 </label>
                 <input
-                  {...register("pages", { 
+                  {...register("pages", {
                     required: "Number of pages is required",
-                    min: { value: 1, message: "Pages must be at least 1" }
+                    min: { value: 1, message: "Pages must be at least 1" },
                   })}
                   type="number"
                   placeholder="180"
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff7236] focus:border-transparent outline-none transition"
                 />
                 {errors.pages && (
-                  <p className="text-red-500 text-sm mt-1">{errors.pages.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.pages.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Status */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Status <span className="text-red-500">*</span>
+                </label>
+                <select
+                  {...register("published_status", {
+                    required: "Status is required",
+                  })}
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff7236] focus:border-transparent outline-none transition bg-white"
+                >
+                  <option value="">Select Status</option>
+                  <option value="published">published</option>
+                  <option value="unpublished">unpublished</option>
+                </select>
+                {errors.status && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.status.message}
+                  </p>
                 )}
               </div>
 
@@ -315,9 +407,9 @@ const AddBookForm = () => {
                 </label>
                 <div className="relative">
                   <input
-                    {...register("price", { 
+                    {...register("price", {
                       required: "Price is required",
-                      min: { value: 0, message: "Price must be at least 0" }
+                      min: { value: 0, message: "Price must be at least 0" },
                     })}
                     type="number"
                     step="0.01"
@@ -327,7 +419,9 @@ const AddBookForm = () => {
                   <DollarSign className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                 </div>
                 {errors.price && (
-                  <p className="text-red-500 text-sm mt-1">{errors.price.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.price.message}
+                  </p>
                 )}
               </div>
 
@@ -337,13 +431,17 @@ const AddBookForm = () => {
                   Description <span className="text-red-500">*</span>
                 </label>
                 <textarea
-                  {...register("description", { required: "Description is required" })}
+                  {...register("description", {
+                    required: "Description is required",
+                  })}
                   rows="4"
                   placeholder="Enter book description..."
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff7236] focus:border-transparent outline-none transition resize-none"
                 ></textarea>
                 {errors.description && (
-                  <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.description.message}
+                  </p>
                 )}
               </div>
             </div>
@@ -363,9 +461,12 @@ const AddBookForm = () => {
                 </label>
                 <div className="relative">
                   <input
-                    {...register("availableCopies", { 
+                    {...register("availableCopies", {
                       required: "Available copies is required",
-                      min: { value: 0, message: "Available copies must be at least 0" }
+                      min: {
+                        value: 0,
+                        message: "Available copies must be at least 0",
+                      },
                     })}
                     type="number"
                     placeholder="5"
@@ -374,7 +475,9 @@ const AddBookForm = () => {
                   <Package className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                 </div>
                 {errors.availableCopies && (
-                  <p className="text-red-500 text-sm mt-1">{errors.availableCopies.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.availableCopies.message}
+                  </p>
                 )}
               </div>
 
@@ -385,9 +488,12 @@ const AddBookForm = () => {
                 </label>
                 <div className="relative">
                   <input
-                    {...register("totalCopies", { 
+                    {...register("totalCopies", {
                       required: "Total copies is required",
-                      min: { value: 1, message: "Total copies must be at least 1" }
+                      min: {
+                        value: 1,
+                        message: "Total copies must be at least 1",
+                      },
                     })}
                     type="number"
                     placeholder="8"
@@ -396,7 +502,9 @@ const AddBookForm = () => {
                   <Package className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                 </div>
                 {errors.totalCopies && (
-                  <p className="text-red-500 text-sm mt-1">{errors.totalCopies.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.totalCopies.message}
+                  </p>
                 )}
               </div>
 
@@ -407,7 +515,9 @@ const AddBookForm = () => {
                 </label>
                 <div className="relative">
                   <input
-                    {...register("libraryLocation", { required: "Library location is required" })}
+                    {...register("libraryLocation", {
+                      required: "Library location is required",
+                    })}
                     type="text"
                     placeholder="Central Library - Fiction Section A"
                     className="w-full px-4 py-2.5 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff7236] focus:border-transparent outline-none transition"
@@ -415,7 +525,9 @@ const AddBookForm = () => {
                   <MapPin className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                 </div>
                 {errors.libraryLocation && (
-                  <p className="text-red-500 text-sm mt-1">{errors.libraryLocation.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.libraryLocation.message}
+                  </p>
                 )}
               </div>
 
@@ -425,13 +537,17 @@ const AddBookForm = () => {
                   Shelf Number <span className="text-red-500">*</span>
                 </label>
                 <input
-                  {...register("shelfNumber", { required: "Shelf number is required" })}
+                  {...register("shelfNumber", {
+                    required: "Shelf number is required",
+                  })}
                   type="text"
                   placeholder="A-245"
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff7236] focus:border-transparent outline-none transition"
                 />
                 {errors.shelfNumber && (
-                  <p className="text-red-500 text-sm mt-1">{errors.shelfNumber.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.shelfNumber.message}
+                  </p>
                 )}
               </div>
             </div>
@@ -452,7 +568,9 @@ const AddBookForm = () => {
                 <div className="flex gap-4 mt-3">
                   <label className="flex items-center cursor-pointer">
                     <input
-                      {...register("deliveryAvailable", { required: "Delivery option is required" })}
+                      {...register("deliveryAvailable", {
+                        required: "Delivery option is required",
+                      })}
                       type="radio"
                       value="true"
                       className="w-4 h-4 text-[#ff7236] focus:ring-[#ff7236] focus:ring-2"
@@ -461,7 +579,9 @@ const AddBookForm = () => {
                   </label>
                   <label className="flex items-center cursor-pointer">
                     <input
-                      {...register("deliveryAvailable", { required: "Delivery option is required" })}
+                      {...register("deliveryAvailable", {
+                        required: "Delivery option is required",
+                      })}
                       type="radio"
                       value="false"
                       className="w-4 h-4 text-[#ff7236] focus:ring-[#ff7236] focus:ring-2"
@@ -470,7 +590,9 @@ const AddBookForm = () => {
                   </label>
                 </div>
                 {errors.deliveryAvailable && (
-                  <p className="text-red-500 text-sm mt-1">{errors.deliveryAvailable.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.deliveryAvailable.message}
+                  </p>
                 )}
               </div>
 
@@ -482,7 +604,9 @@ const AddBookForm = () => {
                 <div className="flex gap-4 mt-3">
                   <label className="flex items-center cursor-pointer">
                     <input
-                      {...register("pickupAvailable", { required: "Pickup option is required" })}
+                      {...register("pickupAvailable", {
+                        required: "Pickup option is required",
+                      })}
                       type="radio"
                       value="true"
                       className="w-4 h-4 text-[#ff7236] focus:ring-[#ff7236] focus:ring-2"
@@ -491,7 +615,9 @@ const AddBookForm = () => {
                   </label>
                   <label className="flex items-center cursor-pointer">
                     <input
-                      {...register("pickupAvailable", { required: "Pickup option is required" })}
+                      {...register("pickupAvailable", {
+                        required: "Pickup option is required",
+                      })}
                       type="radio"
                       value="false"
                       className="w-4 h-4 text-[#ff7236] focus:ring-[#ff7236] focus:ring-2"
@@ -500,7 +626,9 @@ const AddBookForm = () => {
                   </label>
                 </div>
                 {errors.pickupAvailable && (
-                  <p className="text-red-500 text-sm mt-1">{errors.pickupAvailable.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.pickupAvailable.message}
+                  </p>
                 )}
               </div>
 
@@ -511,9 +639,12 @@ const AddBookForm = () => {
                 </label>
                 <div className="relative">
                   <input
-                    {...register("rentalDays", { 
+                    {...register("rentalDays", {
                       required: "Rental days is required",
-                      min: { value: 1, message: "Rental days must be at least 1" }
+                      min: {
+                        value: 1,
+                        message: "Rental days must be at least 1",
+                      },
                     })}
                     type="number"
                     placeholder="14"
@@ -522,7 +653,9 @@ const AddBookForm = () => {
                   <Clock className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                 </div>
                 {errors.rentalDays && (
-                  <p className="text-red-500 text-sm mt-1">{errors.rentalDays.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.rentalDays.message}
+                  </p>
                 )}
               </div>
 
@@ -533,9 +666,9 @@ const AddBookForm = () => {
                 </label>
                 <div className="relative">
                   <input
-                    {...register("lateFeePerDay", { 
+                    {...register("lateFeePerDay", {
                       required: "Late fee per day is required",
-                      min: { value: 0, message: "Late fee must be at least 0" }
+                      min: { value: 0, message: "Late fee must be at least 0" },
                     })}
                     type="number"
                     step="0.01"
@@ -545,7 +678,9 @@ const AddBookForm = () => {
                   <DollarSign className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                 </div>
                 {errors.lateFeePerDay && (
-                  <p className="text-red-500 text-sm mt-1">{errors.lateFeePerDay.message}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.lateFeePerDay.message}
+                  </p>
                 )}
               </div>
             </div>
@@ -554,10 +689,11 @@ const AddBookForm = () => {
           {/* Submit Button */}
           <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
             <button
+              onClick={() => reset()}
               type="button"
               className="w-full sm:w-auto px-6 py-3 border-2 border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition"
             >
-              Cancel
+              Reset
             </button>
             <button
               type="submit"

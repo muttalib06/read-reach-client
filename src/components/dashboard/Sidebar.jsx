@@ -4,6 +4,8 @@ import { LuBox } from "react-icons/lu";
 import { NavLink } from "react-router";
 import { GoHistory } from "react-icons/go";
 import { IoIosAddCircle } from "react-icons/io";
+import { FaBookOpen } from "react-icons/fa";
+import { FiBook } from "react-icons/fi";
 
 // Sidebar Component
 const Sidebar = ({ isOpen, setIsOpen }) => {
@@ -15,7 +17,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       label: "Payment History",
       path: "/dashboard/payment-history",
     },
-    {icon:IoIosAddCircle,label:"Add Book",path:"/dashboard/add-book"}
+    { icon: IoIosAddCircle, label: "Add Book", path: "/dashboard/add-book" },
+    {icon:FaBookOpen,label:"My Book", path:"/dashboard/my-book"},
+    {icon:FiBook, label:"Orders",path:"/dashboard/librarian-orders"}
   ];
 
   return (

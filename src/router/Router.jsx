@@ -15,6 +15,8 @@ import PaymentSuccess from "../pages/payment/PaymentSuccess";
 import PaymentHistory from "../pages/payment/PaymentHistory";
 import ProfilePage from "../pages/dashboard/ProfilePage";
 import AddBookForm from "../pages/dashboard/AddBookForm";
+import MYBook from "../pages/dashboard/MYBook";
+import LibrarianOrders from "../pages/dashboard/LibrarainOrders";
 
 export const router = createBrowserRouter([
   {
@@ -91,6 +93,14 @@ export const router = createBrowserRouter([
       {
         path:"add-book",
         element:<AddBookForm></AddBookForm>
+      },
+      {
+        path:"my-book",
+        element:<MYBook></MYBook>
+      },
+      {
+        path:"librarian-orders",
+        element:<LibrarianOrders></LibrarianOrders>
       }
     ],
   },

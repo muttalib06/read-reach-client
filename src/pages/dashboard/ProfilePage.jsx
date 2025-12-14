@@ -170,7 +170,7 @@ const ProfilePage = () => {
                   className="text-lg font-medium mt-1"
                   style={{ color: "#ff7236" }}
                 >
-                  {dbUser.role}
+                  {dbUser?.role}
                 </p>
               </div>
 
