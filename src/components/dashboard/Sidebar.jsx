@@ -6,6 +6,7 @@ import { GoHistory } from "react-icons/go";
 import { IoIosAddCircle } from "react-icons/io";
 import { FaBookOpen } from "react-icons/fa";
 import { FiBook } from "react-icons/fi";
+import { FaRegUserCircle } from "react-icons/fa";
 
 // Sidebar Component
 const Sidebar = ({ isOpen, setIsOpen }) => {
@@ -18,8 +19,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       path: "/dashboard/payment-history",
     },
     { icon: IoIosAddCircle, label: "Add Book", path: "/dashboard/add-book" },
-    {icon:FaBookOpen,label:"My Book", path:"/dashboard/my-book"},
-    {icon:FiBook, label:"Orders",path:"/dashboard/librarian-orders"}
+    { icon: FaBookOpen, label: "My Book", path: "/dashboard/my-book" },
+    { icon: FiBook, label: "Orders", path: "/dashboard/librarian-orders" },
+    {icon:FaRegUserCircle,label:"User Management",path:"/dashboard/user-management"}
   ];
 
   return (

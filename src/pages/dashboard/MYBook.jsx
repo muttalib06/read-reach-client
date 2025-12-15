@@ -111,7 +111,7 @@ const MYBook = () => {
           {/* Header */}
           <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
             <div className="flex items-center justify-between">
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-800 mb-2">
                 Edit Book Information
               </h1>
               <button
@@ -607,7 +607,7 @@ const MYBook = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-800 mb-2">
             My Books
           </h1>
           <p className="text-gray-600 mt-2">

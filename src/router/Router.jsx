@@ -17,6 +17,7 @@ import ProfilePage from "../pages/dashboard/ProfilePage";
 import AddBookForm from "../pages/dashboard/AddBookForm";
 import MYBook from "../pages/dashboard/MYBook";
 import LibrarianOrders from "../pages/dashboard/LibrarainOrders";
+import UserManagementTable from "../pages/dashboard/UserManagementTable";
 
 export const router = createBrowserRouter([
   {
@@ -101,6 +102,10 @@ export const router = createBrowserRouter([
       {
         path:"librarian-orders",
         element:<LibrarianOrders></LibrarianOrders>
+      },
+      {
+        path:"user-management",
+        element:<UserManagementTable></UserManagementTable>
       }
     ],
   },

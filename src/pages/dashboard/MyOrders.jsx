@@ -93,10 +93,6 @@ const MyOrders = () => {
     }
   }, [error, navigate]);
 
-  if (isLoading) {
-    return <Spinner></Spinner>;
-  }
-
   const getStatusColor = (status) => {
     switch (status) {
       case "delivered":
@@ -122,6 +118,10 @@ const MyOrders = () => {
         return "text-red-500";
     }
   };
+
+  if (isLoading) {
+    return <Spinner></Spinner>;
+  }
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100">
@@ -187,7 +187,7 @@ const MyOrders = () => {
                       {order.bookName}
                     </td>
                     <td className="px-6 py-4 text-sm text-slate-900 font-semibold">
-                      ${order.price.toFixed(2)}
+                      ${order.price}
                     </td>
                     <td className="px-6 py-4">
                       <span
@@ -268,7 +268,7 @@ const MyOrders = () => {
                 </div>
                 <div className="text-right">
                   <p className="text-lg sm:text-xl font-bold text-slate-900">
-                    ${order.price.toFixed(2)}
+                    ${order.price}
                   </p>
                 </div>
               </div>

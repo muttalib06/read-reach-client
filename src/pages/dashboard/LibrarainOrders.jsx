@@ -1,16 +1,10 @@
-import React, { useState } from "react";
-import {
-  ChevronDown,
-  Package,
-  Clock,
-  Truck,
-  CheckCircle,
-  XCircle,
-} from "lucide-react";
+import React from "react";
+import { Package, Clock, Truck, CheckCircle, XCircle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
 import Spinner from "../../components/sharedComponents/spinner/Spinner";
+import Swal from "sweetalert2";
 
 const LibrarianOrders = () => {
   const { user } = useAuth();
@@ -18,7 +12,11 @@ const LibrarianOrders = () => {
 
   // fetch orders from mongodb of this librarian;
 
-  const { data: orders = [], isLoading } = useQuery({
+  const {
+    data: orders = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["orders", user.email],
     queryFn: async () => {
       const res = await axiosSecure.get(
@@ -27,130 +25,98 @@ const LibrarianOrders = () => {
       return res.data;
     },
   });
-//   const [orders, setOrders] = useState([
-//     {
-//       id: "693e1b2ddcfdd433b640282e",
-//       date: "Dec 14, 2025",
-//       bookName: "To Kill a Mockingbird",
-//       bookImage:
-//         "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=600&fit=crop",
-//       price: "$18.99",
-//       status: "pending",
-//       customerName: "John Doe",
-//       address: "123 Main St, New York",
-//     },
-//     {
-//       id: "693e1b2ddcfdd433b640283f",
-//       date: "Dec 13, 2025",
-//       bookName: "1984",
-//       bookImage:
-//         "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=600&fit=crop",
-//       price: "$15.99",
-//       status: "processing",
-//       customerName: "Jane Smith",
-//       address: "456 Oak Ave, Boston",
-//     },
-//     {
-//       id: "693e1b2ddcfdd433b640284g",
-//       date: "Dec 12, 2025",
-//       bookName: "The Great Gatsby",
-//       bookImage:
-//         "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400&h=600&fit=crop",
-//       price: "$14.50",
-//       status: "shipped",
-//       customerName: "Mike Johnson",
-//       address: "789 Pine Rd, Chicago",
-//     },
-//     {
-//       id: "693e1b2ddcfdd433b640285h",
-//       date: "Dec 11, 2025",
-//       bookName: "Pride and Prejudice",
-//       bookImage:
-//         "https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=400&h=600&fit=crop",
-//       price: "$16.75",
-//       status: "delivered",
-//       customerName: "Sarah Wilson",
-//       address: "321 Elm St, Seattle",
-//     },
-//   ]);
 
-  const [openDropdown, setOpenDropdown] = useState(null);
+  // status option
 
-  console.log(orders)
-
-
-//   status config;
-
-  const statusConfig = {
-    pending: {
-      label: "Pending",
+  const statusOptions = [
+    {
+      label: "pending",
       icon: Clock,
       color: "text-yellow-600",
       bg: "bg-yellow-50",
       border: "border-yellow-200",
     },
-    processing: {
-      label: "Processing",
+    {
+      label: "processing",
       icon: Package,
       color: "text-blue-600",
       bg: "bg-blue-50",
       border: "border-blue-200",
     },
-    shipped: {
-      label: "Shipped",
+    {
+      label: "shipped",
       icon: Truck,
       color: "text-purple-600",
       bg: "bg-purple-50",
       border: "border-purple-200",
     },
-    delivered: {
-      label: "Delivered",
+    {
+      label: "delivered",
       icon: CheckCircle,
       color: "text-green-600",
       bg: "bg-green-50",
       border: "border-green-200",
     },
-    cancelled: {
-      label: "Cancelled",
+    {
+      label: "cancelled",
       icon: XCircle,
       color: "text-red-600",
       bg: "bg-red-50",
       border: "border-red-200",
     },
-  };
-
-  const statusOptions = [
-    "pending",
-    "processing",
-    "shipped",
-    "delivered",
-    "cancelled",
   ];
 
-//   const handleStatusChange = (orderId, newStatus) => {
-//     setOrders(
-//       orders.map((order) =>
-//         order.id === orderId ? { ...order, status: newStatus } : order
-//       )
-//     );
-//     setOpenDropdown(null);
-//   };
+  // get status color;
 
-  const StatusBadge = ({ status }) => {
-    const config = statusConfig[status];
-    const Icon = config.icon;
-    return (
-      <span
-        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${config.color} ${config.bg} border ${config.border}`}
-      >
-        <Icon size={14} />
-        {config.label}
-      </span>
-    );
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "delivered":
+        return "bg-green-300 t-green-800 border-green-200";
+      case "shipped":
+        return "bg-blue-300 text-blue-800 border-blue-200";
+      case "processing":
+        return "bg-yellow-300 text-yellow-800 border-yellow-200";
+      case "pending":
+        return "bg-orange-300 text-orange-800 border-orange-200";
+      case "cancelled":
+        return "bg-red-300 text-red-800 border-red-200";
+      default:
+        return "bg-gray-300 text-gray-800 border-gray-200";
+    }
   };
 
-  if(isLoading){
-        return <Spinner></Spinner>
+  // handle status update;
+
+  const handleStatusUpdate = async (orderId, orderStatus) => {
+    const status = {
+      orderStatus: orderStatus,
+    };
+
+    try {
+      const res = await axiosSecure.patch(
+        `/update-order-status/${orderId}`,
+        status
+      );
+      if (res.data.modifiedCount) {
+        refetch();
+        Swal.fire({
+          title: "Status has been updated successfully",
+          icon: "success",
+          draggable: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
+    }
+  };
+
+  if (isLoading) {
+    return <Spinner></Spinner>;
   }
 
   return (
@@ -158,7 +124,7 @@ const LibrarianOrders = () => {
       <div>
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-800 mb-2">
             Order Management
           </h1>
           <p className="text-gray-600">
@@ -167,9 +133,9 @@ const LibrarianOrders = () => {
         </div>
 
         {/* Table Container */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className=" min-h-screen bg-white rounded-xl  border border-gray-200 ">
           {/* Desktop Table View */}
-          <div className="hidden lg:block overflow-x-auto">
+          <div className="hidden lg:block ">
             <table className="w-full">
               <thead>
                 <tr className="bg-[#2d3e50] text-white">
@@ -219,46 +185,38 @@ const LibrarianOrders = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <StatusBadge status={order.status} />
+                      <span
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(
+                          order.status
+                        )}`}
+                      >
+                        {order.status}
+                      </span>
                     </td>
                     <td className="px-6 py-4">
                       <div className="relative">
-                        <button
-                          onClick={() =>
-                            setOpenDropdown(
-                              openDropdown === order.id ? null : order.id
-                            )
-                          }
-                          className="inline-flex items-center gap-2 px-4 py-2 bg-[#f3701d] text-white rounded-lg hover:bg-[#d86318] transition-colors text-sm font-medium shadow-sm"
-                        >
-                          Change Status
-                          <ChevronDown
-                            size={16}
-                            className={`transition-transform ${
-                              openDropdown === order.id ? "rotate-180" : ""
-                            }`}
-                          />
-                        </button>
-
-                        {openDropdown === order.id && (
-                          <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
-                            {statusOptions.map((status) => {
-                              const config = statusConfig[status];
-                              const Icon = config.icon;
+                        <details className="dropdown">
+                          <summary className="btn m-1 bg-primary text-white">
+                            status{" "}
+                          </summary>
+                          <ul className="space-y-4 menu dropdown-content bg-base-200 rounded-box z-1 w-52 p-2 shadow-sm">
+                            {statusOptions.map((option, index) => {
+                              const Icon = option.icon;
                               return (
                                 <button
-                                  key={status}
-                                  className={`w-full px-4 py-2.5 text-left hover:bg-gray-50 transition-colors flex items-center gap-2 ${config.color}`}
+                                  onClick={() =>
+                                    handleStatusUpdate(order._id, option.label)
+                                  }
+                                  className="flex  items-center gap-4 hover:bg-gray-300 px-1 py-2 rounded"
+                                  key={index}
                                 >
-                                  <Icon size={16} />
-                                  <span className="text-sm font-medium">
-                                    {config.label}
-                                  </span>
+                                  <Icon className="text-primary"></Icon>
+                                  <span>{option.label}</span>
                                 </button>
                               );
                             })}
-                          </div>
-                        )}
+                          </ul>
+                        </details>
                       </div>
                     </td>
                   </tr>
@@ -284,7 +242,9 @@ const LibrarianOrders = () => {
                     <h3 className="font-semibold text-gray-900 mb-1 truncate">
                       {order.bookName}
                     </h3>
-                    <p className="text-sm text-gray-600 mb-2">{new Date(order.createdAt).toLocaleString()}</p>
+                    <p className="text-sm text-gray-600 mb-2">
+                      {new Date(order.createdAt).toLocaleString()}
+                    </p>
                     <p className="text-lg font-bold text-[#f3701d]">
                       $ {order.price}
                     </p>
@@ -295,68 +255,42 @@ const LibrarianOrders = () => {
                   <span className="text-xs text-gray-500 font-medium">
                     Status:
                   </span>
-                  <StatusBadge status={order.status} />
+                  <span
+                    className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium border ${getStatusColor(
+                      order.status
+                    )}`}
+                  >
+                    {order.status}
+                  </span>
                 </div>
 
                 <div className="relative">
-                  <button
-                    onClick={() =>
-                      setOpenDropdown(
-                        openDropdown === order.id ? null : order.id
-                      )
-                    }
-                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#f3701d] text-white rounded-lg hover:bg-[#d86318] transition-colors text-sm font-medium shadow-sm"
-                  >
-                    Change Status
-                    <ChevronDown
-                      size={16}
-                      className={`transition-transform ${
-                        openDropdown === order.id ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-
-                  {openDropdown === order.id && (
-                    <div className="absolute left-0 right-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
-                      {statusOptions.map((status) => {
-                        const config = statusConfig[status];
-                        const Icon = config.icon;
+                  <details className="dropdown">
+                    <summary className="btn m-1 bg-primary text-white">
+                      status{" "}
+                    </summary>
+                    <ul className="space-y-4 menu dropdown-content bg-base-200 rounded-box z-1 w-52 p-2 shadow-sm">
+                      {statusOptions.map((option, index) => {
+                        const Icon = option.icon;
                         return (
                           <button
-                            className={`w-full px-4 py-2.5 text-left hover:bg-gray-50 transition-colors flex items-center gap-2 ${config.color}`}
+                            onClick={() =>
+                              handleStatusUpdate(order._id, option.label)
+                            }
+                            className="flex  items-center gap-4 hover:bg-gray-300 px-1 py-2 rounded"
+                            key={index}
                           >
-                            <Icon size={16} />
-                            <span className="text-sm font-medium">
-                              {config.label}
-                            </span>
+                            <Icon className="text-primary"></Icon>
+                            <span>{option.label}</span>
                           </button>
                         );
                       })}
-                    </div>
-                  )}
+                    </ul>
+                  </details>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Stats Footer */}
-        <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {statusOptions.slice(0, 4).map((status) => {
-            const count = orders.filter((o) => o.status === status).length;
-            const config = statusConfig[status];
-            return (
-              <div
-                key={status}
-                className={`bg-white p-4 rounded-lg shadow-sm border ${config.border}`}
-              >
-                <div className={`text-2xl font-bold ${config.color} mb-1`}>
-                  {count}
-                </div>
-                <div className="text-sm text-gray-600">{config.label}</div>
-              </div>
-            );
-          })}
         </div>
       </div>
     </div>
