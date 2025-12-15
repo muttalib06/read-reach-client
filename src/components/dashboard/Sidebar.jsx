@@ -12,7 +12,7 @@ import { FaRegUserCircle } from "react-icons/fa";
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const menuItems = [
     { icon: Home, label: "Dashboard", path: "/dashboard" },
-    { icon: LuBox, label: "Orders", path: "/dashboard/orders" },
+    { icon: LuBox, label: "My Orders", path: "/dashboard/orders" },
     {
       icon: GoHistory,
       label: "Payment History",
@@ -21,7 +21,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { icon: IoIosAddCircle, label: "Add Book", path: "/dashboard/add-book" },
     { icon: FaBookOpen, label: "My Book", path: "/dashboard/my-book" },
     { icon: FiBook, label: "Orders", path: "/dashboard/librarian-orders" },
-    {icon:FaRegUserCircle,label:"User Management",path:"/dashboard/user-management"}
+    {icon:FaRegUserCircle,label:"User Management",path:"/dashboard/user-management"},
+    {icon:FaBookOpen,label:"All Books", path:"/dashboard/all-books"}
   ];
 
   return (

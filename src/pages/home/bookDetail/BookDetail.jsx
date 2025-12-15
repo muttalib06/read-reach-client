@@ -96,6 +96,7 @@ const BookDetail = () => {
       price: book.price,
       bookImage: book.coverImage,
       librarian_email: book.librarian_email,
+      bookId:book._id,
       payment: "unpaid",
       status: "pending",
     };

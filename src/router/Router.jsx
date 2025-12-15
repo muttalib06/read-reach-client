@@ -12,12 +12,14 @@ import MyOrders from "../pages/dashboard/MyOrders";
 import RouterError from "../components/sharedComponents/Error/RouterError";
 import ServerError from "../components/sharedComponents/Error/ServerError";
 import PaymentSuccess from "../pages/payment/PaymentSuccess";
-import PaymentHistory from "../pages/payment/PaymentHistory";
 import ProfilePage from "../pages/dashboard/ProfilePage";
 import AddBookForm from "../pages/dashboard/AddBookForm";
 import MYBook from "../pages/dashboard/MYBook";
 import LibrarianOrders from "../pages/dashboard/LibrarainOrders";
 import UserManagementTable from "../pages/dashboard/UserManagementTable";
+import PaymentHistory from "../pages/dashboard/PaymentHistory";
+import AllBooks from "../pages/dashboard/AllBooks";
+import UserDashboardHome from "../pages/dashboard/DashboardHome/UserDashboardHome";
 
 export const router = createBrowserRouter([
   {
@@ -73,7 +75,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index:true,
-        element: <DashboardHome></DashboardHome>,
+        element:<UserDashboardHome></UserDashboardHome>
       },
       {
         path: "orders",
@@ -81,7 +83,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "payment-history",
-        element: <PaymentHistory></PaymentHistory>,
+        element:<PaymentHistory></PaymentHistory>
       },
       {
         path: "success",
@@ -106,6 +108,10 @@ export const router = createBrowserRouter([
       {
         path:"user-management",
         element:<UserManagementTable></UserManagementTable>
+      },
+      {
+        path:"all-books",
+        element:<AllBooks></AllBooks>
       }
     ],
   },
