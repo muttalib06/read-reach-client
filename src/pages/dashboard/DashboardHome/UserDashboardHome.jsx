@@ -102,53 +102,53 @@ const UserDashboard = () => {
   ];
 
   // Sample data for recent orders
-//   const recentOrders = [
-//     {
-//       id: "#ORD-1024",
-//       bookName: "The Great Gatsby",
-//       author: "F. Scott Fitzgerald",
-//       status: "Delivered",
-//       payment: "Paid",
-//       orderDate: "Dec 10, 2024",
-//       amount: "$12.99",
-//     },
-//     {
-//       id: "#ORD-1023",
-//       bookName: "To Kill a Mockingbird",
-//       author: "Harper Lee",
-//       status: "Shipped",
-//       payment: "Paid",
-//       orderDate: "Dec 12, 2024",
-//       amount: "$14.50",
-//     },
-//     {
-//       id: "#ORD-1022",
-//       bookName: "1984",
-//       author: "George Orwell",
-//       status: "Pending",
-//       payment: "Paid",
-//       orderDate: "Dec 13, 2024",
-//       amount: "$11.99",
-//     },
-//     {
-//       id: "#ORD-1021",
-//       bookName: "Pride and Prejudice",
-//       author: "Jane Austen",
-//       status: "Delivered",
-//       payment: "Paid",
-//       orderDate: "Dec 08, 2024",
-//       amount: "$13.25",
-//     },
-//     {
-//       id: "#ORD-1020",
-//       bookName: "The Catcher in the Rye",
-//       author: "J.D. Salinger",
-//       status: "Cancelled",
-//       payment: "Refunded",
-//       orderDate: "Dec 11, 2024",
-//       amount: "$15.00",
-//     },
-//   ];
+  //   const recentOrders = [
+  //     {
+  //       id: "#ORD-1024",
+  //       bookName: "The Great Gatsby",
+  //       author: "F. Scott Fitzgerald",
+  //       status: "Delivered",
+  //       payment: "Paid",
+  //       orderDate: "Dec 10, 2024",
+  //       amount: "$12.99",
+  //     },
+  //     {
+  //       id: "#ORD-1023",
+  //       bookName: "To Kill a Mockingbird",
+  //       author: "Harper Lee",
+  //       status: "Shipped",
+  //       payment: "Paid",
+  //       orderDate: "Dec 12, 2024",
+  //       amount: "$14.50",
+  //     },
+  //     {
+  //       id: "#ORD-1022",
+  //       bookName: "1984",
+  //       author: "George Orwell",
+  //       status: "Pending",
+  //       payment: "Paid",
+  //       orderDate: "Dec 13, 2024",
+  //       amount: "$11.99",
+  //     },
+  //     {
+  //       id: "#ORD-1021",
+  //       bookName: "Pride and Prejudice",
+  //       author: "Jane Austen",
+  //       status: "Delivered",
+  //       payment: "Paid",
+  //       orderDate: "Dec 08, 2024",
+  //       amount: "$13.25",
+  //     },
+  //     {
+  //       id: "#ORD-1020",
+  //       bookName: "The Catcher in the Rye",
+  //       author: "J.D. Salinger",
+  //       status: "Cancelled",
+  //       payment: "Refunded",
+  //       orderDate: "Dec 11, 2024",
+  //       amount: "$15.00",
+  //     },
+  //   ];
 
   // Data for pie chart with brand colors
   const chartData = [
@@ -284,7 +284,8 @@ const UserDashboard = () => {
                     Your latest book deliveries
                   </p>
                 </div>
-                <button
+                <NavLink
+                  to="/dashboard/orders"
                   className="text-sm font-semibold flex items-center gap-1 hover:gap-2 transition-all text-white px-4 py-2 rounded-lg hover:shadow-lg"
                   style={{
                     background:
@@ -292,7 +293,7 @@ const UserDashboard = () => {
                   }}
                 >
                   View All <ArrowRight className="w-4 h-4" />
-                </button>
+                </NavLink>
               </div>
             </div>
             <div className="overflow-x-auto">
@@ -331,7 +332,8 @@ const UserDashboard = () => {
                             {order.author}
                           </p>
                           <p className="text-xs text-gray-400 mt-1 font-mono">
-                            Order Date:  {new Date(order.createdAt).toLocaleString()}
+                            Order Date:{" "}
+                            {new Date(order.createdAt).toLocaleString()}
                           </p>
                         </div>
                       </td>
@@ -359,7 +361,8 @@ const UserDashboard = () => {
                         </span>
                       </td>
                       <td className="py-4 px-6 text-center">
-                        <button
+                        <NavLink
+                          to="/dashboard/orders"
                           className="px-4 py-2 rounded-lg text-white font-medium text-sm hover:opacity-90 hover:shadow-lg transition-all"
                           style={{
                             background:
@@ -367,7 +370,7 @@ const UserDashboard = () => {
                           }}
                         >
                           View
-                        </button>
+                        </NavLink>
                       </td>
                     </tr>
                   ))}

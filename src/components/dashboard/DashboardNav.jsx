@@ -3,10 +3,27 @@ import { Menu, Settings, LogOut, User, Bell } from "lucide-react";
 import useAuth from "../../hooks/useAuth";
 import { NavLink } from "react-router";
 import Swal from "sweetalert2";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const DashboardNav = ({ setIsSidebarOpen }) => {
   const { user, logOut } = useAuth();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const axiosSecure = useAxiosSecure();
+
+  // fetch user from database;
+  const { data: dbUser } = useQuery({
+    queryKey: ["user", user.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/user?email=${user.email}`);
+      return res.data;
+    },
+  });
+
+  // capitalize function
+
+  const capitalize = (text = "") =>
+    text ? text[0].toUpperCase() + text.slice(1) : "";
 
   const handleLogOut = () => {
     logOut()
@@ -35,7 +52,7 @@ const DashboardNav = ({ setIsSidebarOpen }) => {
           </button>
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-              Dashboard
+              {capitalize(dbUser?.role)} Dashboard
             </h1>
             <p className="text-sm text-gray-600 mt-1 flex items-center">
               <span

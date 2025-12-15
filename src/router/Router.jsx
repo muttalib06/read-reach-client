@@ -20,6 +20,8 @@ import UserManagementTable from "../pages/dashboard/UserManagementTable";
 import PaymentHistory from "../pages/dashboard/PaymentHistory";
 import AllBooks from "../pages/dashboard/AllBooks";
 import UserDashboardHome from "../pages/dashboard/DashboardHome/UserDashboardHome";
+import LibrarianDashboardHome from "../pages/dashboard/DashboardHome/LibrarianDashboardHome";
+import AdminDashboardHome from "../pages/dashboard/DashboardHome/AdminDashboardHome";
 
 export const router = createBrowserRouter([
   {
@@ -112,7 +114,15 @@ export const router = createBrowserRouter([
       {
         path:"all-books",
         element:<AllBooks></AllBooks>
+      },
+      {
+        path:"librarian-dashboard-home",
+        element:<LibrarianDashboardHome></LibrarianDashboardHome>
+      },{
+        path:"admin-dashboard-home",
+        element:<AdminDashboardHome></AdminDashboardHome>
       }
+
     ],
   },
 ]);

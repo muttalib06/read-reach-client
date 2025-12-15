@@ -9,7 +9,7 @@ const NoBookOrders = () => {
         <div className="mb-6 flex justify-center">
           <div className="relative">
             <div className="absolute inset-0 bg-[#ff7236] opacity-10 rounded-full blur-xl"></div>
-            <div className="relative bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-full">
+            <div className="relative bg-linear-to-br from-orange-50 to-orange-100 p-6 rounded-full">
               <Package className="w-16 h-16 text-[#ff7236]" strokeWidth={1.5} />
             </div>
           </div>
