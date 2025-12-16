@@ -3,7 +3,7 @@ import Spinner from "../components/sharedComponents/spinner/Spinner";
 import useAuth from "../hooks/useAuth";
 import Sidebar from "../components/dashboard/Sidebar";
 import DashboardNav from "../components/dashboard/DashboardNav";
-import { Outlet, useLocation, useNavigate } from "react-router";
+import { Outlet, replace, useLocation, useNavigate } from "react-router";
 import useRole from "../hooks/useRole";
 
 const DashboardLayout = () => {
@@ -17,11 +17,11 @@ const DashboardLayout = () => {
     // only navigate if we are at the base dashboard route;
     if (!isLoading && role && location.pathname === "/dashboard") {
       if (role === "admin") {
-        navigate("/dashboard/admin-home");
+        navigate("/dashboard/admin-home", { replace: true });
       } else if (role === "librarian") {
-        navigate("/dashboard/librarian-home");
+        navigate("/dashboard/librarian-home", { replace: true });
       } else {
-        navigate("/dashboard/user-home");
+        navigate("/dashboard/user-home", { replace: true });
       }
     }
   }, [navigate, role, location.pathname, isLoading]);

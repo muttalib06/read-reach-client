@@ -7,27 +7,77 @@ import { IoIosAddCircle } from "react-icons/io";
 import { FaBookOpen } from "react-icons/fa";
 import { FiBook } from "react-icons/fi";
 import { FaRegUserCircle } from "react-icons/fa";
+import useRole from "../../hooks/useRole";
+import Spinner from "../sharedComponents/spinner/Spinner";
 
 // Sidebar Component
 const Sidebar = ({ isOpen, setIsOpen }) => {
+  const { role, isLoading } = useRole();
   const menuItems = [
-    { icon: Home, label: "Dashboard", path: "/dashboard" },
-    { icon: LuBox, label: "My Orders", path: "/dashboard/orders" },
+    // Common routes
+    {
+      icon: Home,
+      label: "Dashboard",
+      path: "/dashboard",
+      roles: ["admin", "librarian", "user"],
+    },
+
+    // User routes
+    {
+      icon: LuBox,
+      label: "My Orders",
+      path: "/dashboard/orders",
+      roles: ["user"],
+    },
     {
       icon: GoHistory,
       label: "Payment History",
       path: "/dashboard/payment-history",
+      roles: ["user"],
     },
-    { icon: IoIosAddCircle, label: "Add Book", path: "/dashboard/add-book" },
-    { icon: FaBookOpen, label: "My Book", path: "/dashboard/my-book" },
-    { icon: FiBook, label: "Orders", path: "/dashboard/librarian-orders" },
+
+    // Librarian routes
+    {
+      icon: IoIosAddCircle,
+      label: "Add Book",
+      path: "/dashboard/add-book",
+      roles: ["librarian"],
+    },
+    {
+      icon: FaBookOpen,
+      label: "My Books",
+      path: "/dashboard/my-book",
+      roles: ["librarian"],
+    },
+    {
+      icon: FiBook,
+      label: "Orders",
+      path: "/dashboard/librarian-orders",
+      roles: ["librarian"],
+    },
+
+    // Admin routes
     {
       icon: FaRegUserCircle,
       label: "User Management",
       path: "/dashboard/user-management",
+      roles: ["admin"],
     },
-    { icon: FaBookOpen, label: "All Books", path: "/dashboard/all-books" },
+    {
+      icon: FaBookOpen,
+      label: "Manage Books",
+      path: "/dashboard/all-books",
+      roles: ["admin"],
+    },
   ];
+
+  const filteredMenuItems = menuItems.filter((item) =>
+    item.roles.includes(role)
+  );
+
+  if (isLoading) {
+    return <Spinner></Spinner>;
+  }
 
   return (
     <>
@@ -50,7 +100,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         <div className="flex shadow items-center justify-between p-6 border-b border-orange-600">
           <NavLink to="/" className="flex items-center gap-3">
             <BookOpen className="w-8 h-8" />
-            <h1 className="text-xl font-bold">ReadReach</h1>
+            <h1 className="text-xl font-bold hover:text-black">ReadReach</h1>
           </NavLink>
           <button
             onClick={() => setIsOpen(false)}
@@ -62,7 +112,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
         {/* Navigation Menu */}
         <nav className="p-4 space-y-2">
-          {menuItems.map((item) => {
+          {filteredMenuItems.map((item) => {
             const Icon = item.icon;
             return (
               <NavLink
