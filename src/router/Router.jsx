@@ -22,6 +22,9 @@ import AllBooks from "../pages/dashboard/AllBooks";
 import UserDashboardHome from "../pages/dashboard/DashboardHome/UserDashboardHome";
 import LibrarianDashboardHome from "../pages/dashboard/DashboardHome/LibrarianDashboardHome";
 import AdminDashboardHome from "../pages/dashboard/DashboardHome/AdminDashboardHome";
+import UnauthorizedPage from "../pages/notAuthorization/UnauthorizedPage";
+import ForbiddenPage from "../pages/notAuthorization/ForbiddenPage";
+import RoleRoute from "./RoleRoute";
 
 export const router = createBrowserRouter([
   {
@@ -59,6 +62,19 @@ export const router = createBrowserRouter([
     element: <ServerError></ServerError>,
   },
 
+  // unauthorized page.
+
+  {
+    path: "unauthorized",
+    element: <UnauthorizedPage></UnauthorizedPage>,
+  },
+
+  // forbidden page.
+  {
+    path: "forbidden",
+    element: <ForbiddenPage></ForbiddenPage>,
+  },
+
   // payment success page
 
   {
@@ -75,9 +91,34 @@ export const router = createBrowserRouter([
     ),
 
     children: [
+      // user
       {
-        index:true,
-        element:<UserDashboardHome></UserDashboardHome>
+        path: "user-home",
+        element: (
+          <RoleRoute allowedRoles={["user"]}>
+            <UserDashboardHome></UserDashboardHome>
+          </RoleRoute>
+        ),
+      },
+
+      // librarian
+      {
+        path: "librarian-home",
+        element: (
+          <RoleRoute allowedRoles={["librarian"]}>
+            <LibrarianDashboardHome></LibrarianDashboardHome>
+          </RoleRoute>
+        ),
+      },
+
+      // admin
+      {
+        path: "admin-home",
+        element: (
+          <RoleRoute allowedRoles={["admin"]}>
+            <AdminDashboardHome></AdminDashboardHome>
+          </RoleRoute>
+        ),
       },
       {
         path: "orders",
@@ -85,44 +126,44 @@ export const router = createBrowserRouter([
       },
       {
         path: "payment-history",
-        element:<PaymentHistory></PaymentHistory>
+        element: <PaymentHistory></PaymentHistory>,
       },
       {
         path: "success",
         element: <PaymentSuccess></PaymentSuccess>,
       },
       {
-        path:"profile",
-        element:<ProfilePage></ProfilePage>
+        path: "profile",
+        element: <ProfilePage></ProfilePage>,
       },
       {
-        path:"add-book",
-        element:<AddBookForm></AddBookForm>
+        path: "add-book",
+        element: <AddBookForm></AddBookForm>,
       },
       {
-        path:"my-book",
-        element:<MYBook></MYBook>
+        path: "my-book",
+        element: <MYBook></MYBook>,
       },
       {
-        path:"librarian-orders",
-        element:<LibrarianOrders></LibrarianOrders>
+        path: "librarian-orders",
+        element: <LibrarianOrders></LibrarianOrders>,
       },
       {
-        path:"user-management",
-        element:<UserManagementTable></UserManagementTable>
+        path: "user-management",
+        element: <UserManagementTable></UserManagementTable>,
       },
       {
-        path:"all-books",
-        element:<AllBooks></AllBooks>
+        path: "all-books",
+        element: <AllBooks></AllBooks>,
       },
       {
-        path:"librarian-dashboard-home",
-        element:<LibrarianDashboardHome></LibrarianDashboardHome>
-      },{
-        path:"admin-dashboard-home",
-        element:<AdminDashboardHome></AdminDashboardHome>
-      }
-
+        path: "librarian-dashboard-home",
+        element: <LibrarianDashboardHome></LibrarianDashboardHome>,
+      },
+      {
+        path: "admin-dashboard-home",
+        element: <AdminDashboardHome></AdminDashboardHome>,
+      },
     ],
   },
 ]);

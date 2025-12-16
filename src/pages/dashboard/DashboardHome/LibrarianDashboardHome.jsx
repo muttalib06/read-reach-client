@@ -245,7 +245,7 @@ const LibrarianDashboardHome = () => {
                            to="/dashboard/librarian-orders"
                             className="px-4 py-2 text-sm font-bold text-white rounded-lg bg-linear-to-r from-[#ff7236] to-[#ff8c5a] hover:shadow-lg hover:scale-105 transition-all duration-200"
                           >
-                            Update Status
+                             View
                           </NavLink>
                         </td>
                       </tr>

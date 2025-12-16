@@ -1,15 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Spinner from "../components/sharedComponents/spinner/Spinner";
 import useAuth from "../hooks/useAuth";
 import Sidebar from "../components/dashboard/Sidebar";
 import DashboardNav from "../components/dashboard/DashboardNav";
-import { Outlet } from "react-router";
+import { Outlet, useLocation, useNavigate } from "react-router";
+import useRole from "../hooks/useRole";
 
 const DashboardLayout = () => {
   const { loading } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { role, isLoading } = useRole();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  if (loading) {
+  useEffect(() => {
+    // only navigate if we are at the base dashboard route;
+    if (!isLoading && role && location.pathname === "/dashboard") {
+      if (role === "admin") {
+        navigate("/dashboard/admin-home");
+      } else if (role === "librarian") {
+        navigate("/dashboard/librarian-home");
+      } else {
+        navigate("/dashboard/user-home");
+      }
+    }
+  }, [navigate, role, location.pathname, isLoading]);
+
+  if (loading || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <Spinner />

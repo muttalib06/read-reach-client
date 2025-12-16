@@ -91,12 +91,11 @@ const SignupPage = () => {
       // save user data to database;
       const userInfo = {
         name,
-        image,
         phone,
         address,
         email,
         imageUrl,
-        role:"user"
+        role: "user",
       };
       await axiosInstance.post("/users", userInfo);
 
@@ -118,7 +117,18 @@ const SignupPage = () => {
     setLoading(false);
 
     try {
-      await signInWithGoogle();
+      const res = await signInWithGoogle();
+      const user = res.user;
+      // save user data to database;
+      const userInfo = {
+        name:user.displayName,
+        phone:user.phoneNumber,
+        address:"Bangladesh",
+        email:user.email,
+        imageUrl:user.photoURL,
+        role: "user",
+      };
+      await axiosInstance.post("/users", userInfo);
       navigate(from, { replace: true });
     } catch (error) {
       handleError(error);

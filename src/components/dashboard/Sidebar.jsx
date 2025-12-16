@@ -21,8 +21,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { icon: IoIosAddCircle, label: "Add Book", path: "/dashboard/add-book" },
     { icon: FaBookOpen, label: "My Book", path: "/dashboard/my-book" },
     { icon: FiBook, label: "Orders", path: "/dashboard/librarian-orders" },
-    {icon:FaRegUserCircle,label:"User Management",path:"/dashboard/user-management"},
-    {icon:FaBookOpen,label:"All Books", path:"/dashboard/all-books"}
+    {
+      icon: FaRegUserCircle,
+      label: "User Management",
+      path: "/dashboard/user-management",
+    },
+    { icon: FaBookOpen, label: "All Books", path: "/dashboard/all-books" },
   ];
 
   return (

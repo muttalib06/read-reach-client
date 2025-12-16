@@ -37,7 +37,10 @@ const AllBooks = () => {
       published_status: status,
     };
     try {
-      const res = await axiosSecure.patch(`/publish-status-update/${bookId}`);
+      const res = await axiosSecure.patch(
+        `/publish-status-update/${bookId}`,
+        publishStatus
+      );
       if (res.data.modifiedCount) {
         refetch();
         Swal.fire({
@@ -179,35 +182,41 @@ const AllBooks = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full border ${
-                          book.status === "publish"
+                          book.published_status === "published"
                             ? "bg-green-100 text-green-700 border-green-200"
                             : "bg-gray-100 text-gray-700 border-gray-200"
                         }`}
                       >
-                        {book.published ? "Published" : "Unpublished"}
+                        {book.published_status}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-2">
-                        <button
-                          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors font-medium text-sm ${
-                            book.published
-                              ? "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                              : "bg-[#ff7236] text-white hover:bg-[#e86530]"
-                          }`}
-                        >
-                          {book.published ? (
-                            <>
-                              <EyeOff className="w-4 h-4" />
-                              Unpublish
-                            </>
-                          ) : (
-                            <>
-                              <Eye className="w-4 h-4" />
-                              Publish
-                            </>
-                          )}
-                        </button>
+                        {/* Show Unpublish button if book is published */}
+                        {book.published_status === "published" && (
+                          <button
+                            onClick={() =>
+                              handlePublishStatus(book._id, "unpublished")
+                            }
+                            className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors font-medium text-sm bg-gray-200 text-gray-700 hover:bg-gray-300"
+                          >
+                            <EyeOff className="w-4 h-4" />
+                            Unpublish
+                          </button>
+                        )}
+
+                        {/* Show Publish button if book is not published */}
+                        {book.published_status !== "published" && (
+                          <button
+                            onClick={() =>
+                              handlePublishStatus(book._id, "published")
+                            }
+                            className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors font-medium text-sm bg-[#ff7236] text-white hover:bg-[#e86530]"
+                          >
+                            <Eye className="w-4 h-4" />
+                            Publish
+                          </button>
+                        )}
                         <button
                           onClick={() => handleDelete(book._id)}
                           className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium text-sm"
@@ -232,7 +241,7 @@ const AllBooks = () => {
               >
                 <div className="flex gap-4 mb-4">
                   <img
-                    src={book.coverImagemage}
+                    src={book.coverImage}
                     alt={book.title}
                     className="w-20 h-28 object-cover rounded shadow-md ring-2 ring-gray-200 shrink-0"
                   />

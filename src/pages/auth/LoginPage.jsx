@@ -6,12 +6,14 @@ import { NavLink, useLocation, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import Spinner from "../../components/sharedComponents/spinner/Spinner";
+import useAxios from "../../hooks/useAxios";
 
 const LoginPage = () => {
   const { signIn, signInWithGoogle } = useAuth();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const axiosInstance = useAxios();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -128,7 +130,18 @@ const LoginPage = () => {
     setError("");
     setLoading(true);
     try {
-      await signInWithGoogle();
+      const res = await signInWithGoogle();
+      const user = res.user;
+      // save user data to database;
+      const userInfo = {
+        name: user.displayName,
+        phone: user.phoneNumber,
+        address: "Bangladesh",
+        email: user.email,
+        imageUrl: user.photoURL,
+        role: "user",
+      };
+      await axiosInstance.post("/users", userInfo);
       navigate(from, { replace: true });
     } catch (error) {
       handleError(error);
