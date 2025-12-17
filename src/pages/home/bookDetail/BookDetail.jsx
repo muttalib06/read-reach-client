@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
-import { AiOutlineHeart, AiOutlineShareAlt } from "react-icons/ai";
+import { FaHeart } from "react-icons/fa6";
 import { useNavigate, useParams } from "react-router";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Spinner from "../../../components/sharedComponents/spinner/Spinner";
@@ -74,6 +74,16 @@ const BookDetail = () => {
     },
   });
 
+  // fetch user from the mongodb fo this user's email;
+
+  const { data: role } = useQuery({
+    queryKey: ["user", user.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/user?email=${user.email}`);
+      return res.data.role;
+    },
+  });
+
   // order form management;
 
   const {
@@ -96,7 +106,7 @@ const BookDetail = () => {
       price: book.price,
       bookImage: book.coverImage,
       librarian_email: book.librarian_email,
-      bookId:book._id,
+      bookId: book._id,
       payment: "unpaid",
       status: "pending",
     };
@@ -113,6 +123,39 @@ const BookDetail = () => {
         });
       }
     } catch {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
+    }
+  };
+
+  // handle to add wish list;
+
+  const handleToAddWishlist = async () => {
+    try {
+      const bookInfo = {
+        ...book,
+        email: user.email,
+        bookId: book._id,
+      };
+      const res = await axiosSecure.post("/add-wishlist?email", bookInfo);
+      if (res.data.insertedId) {
+        Swal.fire({
+          title: "Added ot Wishlist",
+          icon: "success",
+          draggable: true,
+        });
+      }
+      if (res.data.message === "Already in Wishlist") {
+        Swal.fire({
+          title: "Already in Wishlist",
+          icon: "info",
+        });
+      }
+    } catch (error) {
+      console.log(error);
       Swal.fire({
         icon: "error",
         title: "Oops...",
@@ -240,14 +283,14 @@ const BookDetail = () => {
               </button>
 
               {/* Wishlist Button */}
-              <button className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary text-white flex items-center justify-center transition">
-                <AiOutlineHeart className="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
-
-              {/* Share Button */}
-              <button className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-gray-100 transition">
-                <AiOutlineShareAlt className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
-              </button>
+              {role === "user" && (
+                <button
+                  onClick={() => handleToAddWishlist()}
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-gray-100 transition"
+                >
+                  <FaHeart className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
+                </button>
+              )}
             </div>
 
             {/* Book Information */}

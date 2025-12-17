@@ -7,7 +7,6 @@ import LoginPage from "../pages/auth/LoginPage";
 import SignupPage from "../pages/auth/SignupPage";
 import PrivateRoute from "./PrivateRoute";
 import BookDetail from "../pages/home/bookDetail/BookDetail";
-import DashboardHome from "../pages/dashboard/DashboardHome";
 import MyOrders from "../pages/dashboard/MyOrders";
 import RouterError from "../components/sharedComponents/Error/RouterError";
 import ServerError from "../components/sharedComponents/Error/ServerError";
@@ -25,6 +24,7 @@ import AdminDashboardHome from "../pages/dashboard/DashboardHome/AdminDashboardH
 import UnauthorizedPage from "../pages/notAuthorization/UnauthorizedPage";
 import ForbiddenPage from "../pages/notAuthorization/ForbiddenPage";
 import RoleRoute from "./RoleRoute";
+import WishlistPage from "../pages/dashboard/WishlistPage";
 
 export const router = createBrowserRouter([
   {
@@ -50,7 +50,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "book-detail/:id",
-        element: <BookDetail></BookDetail>,
+        element: (
+          <PrivateRoute>
+            <BookDetail></BookDetail>
+          </PrivateRoute>
+        ),
       },
     ],
   },
@@ -159,6 +163,10 @@ export const router = createBrowserRouter([
       {
         path: "librarian-dashboard-home",
         element: <LibrarianDashboardHome></LibrarianDashboardHome>,
+      },
+      {
+        path: "my-wishlist",
+        element: <WishlistPage></WishlistPage>,
       },
       {
         path: "admin-dashboard-home",

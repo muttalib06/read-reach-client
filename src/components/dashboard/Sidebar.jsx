@@ -9,6 +9,7 @@ import { FiBook } from "react-icons/fi";
 import { FaRegUserCircle } from "react-icons/fa";
 import useRole from "../../hooks/useRole";
 import Spinner from "../sharedComponents/spinner/Spinner";
+import { TbJewishStar } from "react-icons/tb";
 
 // Sidebar Component
 const Sidebar = ({ isOpen, setIsOpen }) => {
@@ -34,6 +35,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       label: "Payment History",
       path: "/dashboard/payment-history",
       roles: ["user"],
+    },
+    {
+      icon:TbJewishStar,
+      label:"My Wishlist",
+      path:"/dashboard/my-wishlist",
+      roles:["user"]
     },
 
     // Librarian routes
