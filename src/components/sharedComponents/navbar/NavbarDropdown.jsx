@@ -109,6 +109,26 @@ const NavbarDropdown = ({ handleSignOut }) => {
               Books
             </NavLink>
           </li>
+          <li>
+            <NavLink
+              to="/aboutUs"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2"
+            >
+              <IoBookOutline className="text-xl" />
+              About Us
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/blogs"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2"
+            >
+              <IoBookOutline className="text-xl" />
+              Blogs
+            </NavLink>
+          </li>
 
           <li>
             <NavLink

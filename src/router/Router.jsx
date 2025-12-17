@@ -25,6 +25,8 @@ import UnauthorizedPage from "../pages/notAuthorization/UnauthorizedPage";
 import ForbiddenPage from "../pages/notAuthorization/ForbiddenPage";
 import RoleRoute from "./RoleRoute";
 import WishlistPage from "../pages/dashboard/WishlistPage";
+import AboutUs from "../pages/aboutUs/AboutUs";
+import Blogs from "../pages/blogs/Blogs";
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +49,16 @@ export const router = createBrowserRouter([
       {
         path: "signup",
         element: <SignupPage></SignupPage>,
+      },
+      {
+        path:"aboutUs",
+        element:<AboutUs></AboutUs>
+
+      },
+      {
+        path:"blogs",
+        element:<Blogs></Blogs>
+
       },
       {
         path: "book-detail/:id",

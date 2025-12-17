@@ -75,6 +75,26 @@ const Navbar = () => {
           </li>
           <li>
             <NavLink
+              to="/aboutUs"
+              className={({ isActive }) =>
+                `hover:text-primary ${isActive ? "text-primary" : ""}`
+              }
+            >
+              About Us
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/blogs"
+              className={({ isActive }) =>
+                `hover:text-primary ${isActive ? "text-primary" : ""}`
+              }
+            >
+              Blogs
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
               to="/dashboard"
               className={({ isActive }) =>
                 `hover:text-primary ${isActive ? "text-primary" : ""}`
