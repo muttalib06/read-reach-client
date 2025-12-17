@@ -11,100 +11,156 @@ import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Spinner from "../../components/sharedComponents/spinner/Spinner";
+import Swal from "sweetalert2";
+import { useForm } from "react-hook-form";
+import { Box, Modal, Typography } from "@mui/material";
+import { useState } from "react";
+import { FaEnvelope, FaMapMarked, FaPhone, FaUser } from "react-icons/fa";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: {
+    xs: "95%",
+    sm: "85%",
+    md: "75%",
+    lg: "65%",
+    xl: "55%",
+  },
+  maxWidth: "900px",
+  maxHeight: {
+    xs: "90vh",
+    sm: "85vh",
+  },
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: {
+    xs: 2,
+    sm: 3,
+    md: 4,
+  },
+  borderRadius: 2,
+  overflow: "auto",
+};
 
 const WishlistPage = () => {
   const { user } = useAuth();
+  const [selectedBook, setSelectedBook] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const axiosSecure = useAxiosSecure();
 
+  //   order modal state management;
+  const [openOrder, setOpenOrder] = useState(false);
+  const handleOrderOpen = (book) => {
+    setSelectedBook(book);
+    setOpenOrder(true);
+  };
+  const handleOrderClose = () => setOpenOrder(false);
+
   // fetch wishlist book from the database;
-  const { data: wishlistBooks = [], isLoading } = useQuery({
+  const {
+    data: wishlistBooks = [],
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ["wishlistBook", user.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/wishlist-books?email=${user.email}`);
       return res.data;
     },
   });
-  // Sample wishlist data
-  //   const wishlistItems = [
-  //     {
-  //       id: 1,
-  //       title: "The Midnight Library",
-  //       author: "Matt Haig",
-  //       category: "Fiction",
-  //       rating: 4.5,
-  //       cover:
-  //         "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=200&h=300&fit=crop",
-  //       library: "Central Library",
-  //       distance: "2.3 km",
-  //       available: true,
-  //       addedDate: "2024-12-15",
-  //     },
-  //     {
-  //       id: 2,
-  //       title: "Atomic Habits",
-  //       author: "James Clear",
-  //       category: "Self-Help",
-  //       rating: 4.8,
-  //       cover:
-  //         "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=200&h=300&fit=crop",
-  //       library: "North Branch Library",
-  //       distance: "4.1 km",
-  //       available: true,
-  //       addedDate: "2024-12-14",
-  //     },
-  //     {
-  //       id: 3,
-  //       title: "Project Hail Mary",
-  //       author: "Andy Weir",
-  //       category: "Science Fiction",
-  //       rating: 4.7,
-  //       cover:
-  //         "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=200&h=300&fit=crop",
-  //       library: "Downtown Library",
-  //       distance: "5.8 km",
-  //       available: false,
-  //       addedDate: "2024-12-10",
-  //     },
-  //     {
-  //       id: 4,
-  //       title: "The Psychology of Money",
-  //       author: "Morgan Housel",
-  //       category: "Finance",
-  //       rating: 4.6,
-  //       cover:
-  //         "https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=200&h=300&fit=crop",
-  //       library: "Central Library",
-  //       distance: "2.3 km",
-  //       available: true,
-  //       addedDate: "2024-12-08",
-  //     },
-  //     {
-  //       id: 5,
-  //       title: "Educated",
-  //       author: "Tara Westover",
-  //       category: "Biography",
-  //       rating: 4.9,
-  //       cover:
-  //         "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=200&h=300&fit=crop",
-  //       library: "West Side Library",
-  //       distance: "3.5 km",
-  //       available: true,
-  //       addedDate: "2024-12-05",
-  //     },
-  //     {
-  //       id: 6,
-  //       title: "The Silent Patient",
-  //       author: "Alex Michaelides",
-  //       category: "Thriller",
-  //       rating: 4.4,
-  //       cover:
-  //         "https://images.unsplash.com/photo-1541963463532-d68292c34b19?w=200&h=300&fit=crop",
-  //       library: "East Branch Library",
-  //       distance: "6.2 km",
-  //       available: true,
-  //       addedDate: "2024-12-03",
-  //     },
-  //   ];
+
+  //   filtered book;
+
+  const filteredBooks = wishlistBooks.filter((book) =>
+    book.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  //   manage order form;
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  // send the order data to database;
+
+  const handleOrder = async (data) => {
+    if (!selectedBook) return;
+    const orderInfo = {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      address: data.address,
+      createdAt: new Date(),
+      bookName: selectedBook.title,
+      price: selectedBook.price,
+      bookImage: selectedBook.coverImage,
+      librarian_email: selectedBook.librarian_email,
+      bookId: selectedBook._id,
+      payment: "unpaid",
+      status: "pending",
+    };
+
+    try {
+      const res = await axiosSecure.post("/order", orderInfo);
+      if (res.data.insertedId) {
+        reset();
+        handleOrderClose();
+        setSelectedBook(null);
+        Swal.fire({
+          title: "Order submitted successfully",
+          icon: "success",
+          draggable: true,
+        });
+      }
+    } catch {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
+    }
+  };
+
+  //   handle delete;
+  const handleDelete = async (bookId) => {
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      });
+
+      if (result.isConfirmed) {
+        const res = await axiosSecure.delete(`/delete-wishlist-book/${bookId}`);
+        if (res.data.deletedCount > 0) {
+          refetch();
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
+    }
+  };
 
   if (isLoading) {
     return <Spinner></Spinner>;
@@ -133,6 +189,7 @@ const WishlistPage = () => {
                 size={20}
               />
               <input
+                onChange={(e) => setSearchTerm(e.target.value)}
                 type="text"
                 placeholder="Search books or authors..."
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7700] focus:border-transparent"
@@ -166,16 +223,16 @@ const WishlistPage = () => {
                     <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">
                       Book
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold  uppercase tracking-wider cursor-pointer hover:bg-gray-100">
+                    <th className="px-6 py-4 text-left text-xs font-semibold  uppercase tracking-wider cursor-pointer ">
                       <div className="flex items-center gap-2">Author</div>
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">
                       Category
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider cursor-pointer hover:bg-gray-100">
+                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider cursor-pointer">
                       <div className="flex items-center gap-2">Rating</div>
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider cursor-pointer hover:bg-gray-100">
+                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider cursor-pointer ">
                       <div className="flex items-center gap-2">Library</div>
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">
@@ -187,7 +244,7 @@ const WishlistPage = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {wishlistBooks.map((book) => (
+                  {filteredBooks.map((book) => (
                     <tr
                       key={book._id}
                       className="hover:bg-gray-50 transition-colors"
@@ -237,7 +294,6 @@ const WishlistPage = () => {
                             <div className="text-sm text-gray-900 font-medium">
                               {book.libraryLocation}
                             </div>
-                         
                           </div>
                         </div>
                       </td>
@@ -255,6 +311,7 @@ const WishlistPage = () => {
                       <td className="px-6 py-4">
                         <div className="flex items-center justify-center gap-2">
                           <button
+                            onClick={() => handleOrderOpen(book)}
                             disabled={
                               book.status === "available" ? false : true
                             }
@@ -273,6 +330,7 @@ const WishlistPage = () => {
                             Order
                           </button>
                           <button
+                            onClick={() => handleDelete(book.bookId)}
                             className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                             title="Remove from wishlist"
                           >
@@ -288,7 +346,7 @@ const WishlistPage = () => {
 
             {/* Mobile/Tablet Card View */}
             <div className="lg:hidden divide-y divide-gray-200">
-              {wishlistBooks.map((book) => (
+              {filteredBooks.map((book) => (
                 <div key={book.id} className="p-4 hover:bg-gray-50">
                   <div className="flex gap-4">
                     <img
@@ -306,7 +364,10 @@ const WishlistPage = () => {
                             {book.author}
                           </p>
                         </div>
-                        <button className="p-1.5 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-color shrink-0">
+                        <button
+                          onClick={() => handleDelete(book.bookId)}
+                          className="p-1.5 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-color shrink-0"
+                        >
                           <Trash2 size={18} />
                         </button>
                       </div>
@@ -343,6 +404,7 @@ const WishlistPage = () => {
                           </span>
                         )}
                         <button
+                          onClick={() => handleOrderOpen(book)}
                           disabled={book.status === "available" ? false : true}
                           className={`flex-1 py-2 rounded-lg font-medium text-sm transition-all flex items-center justify-center gap-2 ${
                             book.status === "available"
@@ -361,6 +423,131 @@ const WishlistPage = () => {
             </div>
           </div>
         )}
+      </div>
+
+      {/* order modal */}
+
+      <div className="mt-20">
+        <Modal
+          open={openOrder}
+          onClose={handleOrderClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Box sx={style}>
+            {/* Close button */}
+            <button
+              onClick={handleOrderClose}
+              className="absolute top-2 right-2 sm:top-3 sm:right-3 p-1 sm:p-2 hover:bg-gray-100 rounded-full transition z-10"
+              aria-label="Close modal"
+            >
+              <span className="text-xl sm:text-2xl">&times;</span>
+            </button>
+
+            <Typography
+              className="text-center pr-8"
+              id="modal-modal-title"
+              variant="h6"
+              component="h2"
+              sx={{
+                fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" },
+                fontWeight: 600,
+                mb: 2,
+              }}
+            >
+              Order Now
+            </Typography>
+
+            <Typography
+              id="modal-modal-description"
+              component="div"
+              sx={{
+                mt: 2,
+                fontSize: { xs: "0.875rem", sm: "0.95rem", md: "1rem" },
+                lineHeight: { xs: 1.5, sm: 1.6, md: 1.7 },
+                color: "text.secondary",
+              }}
+            >
+              {/* Form */}
+              <form
+                onSubmit={handleSubmit(handleOrder)}
+                className="p-4 space-y-3"
+              >
+                {/* Name (Readonly) */}
+                <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                  <FaUser className="text-gray-400" />
+                  <input
+                    type="text"
+                    {...register("name")}
+                    value={user?.displayName}
+                    readOnly
+                    className="flex-1 bg-transparent text-sm text-gray-600 outline-none"
+                  />
+                </div>
+
+                {/*  Email (Readonly) */}
+                {/*  Email readonly  */}
+                <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                  <FaEnvelope className="text-gray-400" />
+                  <input
+                    type="email"
+                    {...register("email")}
+                    value={user?.email}
+                    readOnly
+                    className="flex-1 bg-transparent text-sm text-gray-600 outline-none"
+                  />
+                </div>
+
+                {/* Phone */}
+                <div className="flex items-center gap-2 p-3 border-2 border-gray-200 rounded-lg focus-within:border-orange-500 transition">
+                  <FaPhone className="text-gray-400" />
+                  <input
+                    type="tel"
+                    {...register("phone", {
+                      required: "Phone number is required",
+                    })}
+                    placeholder="Phone Number *"
+                    className="flex-1 text-sm outline-none"
+                  />
+                </div>
+                {errors.phone && (
+                  <p className="text-red-500 text-sm">{errors.phone.message}</p>
+                )}
+
+                {/* Address */}
+                <div className="flex items-start gap-2 p-3 border-2 border-gray-200 rounded-lg focus-within:border-orange-500 transition">
+                  <FaMapMarked className="text-gray-400 mt-1" />
+                  <textarea
+                    placeholder="Delivery Address *"
+                    {...register("address", {
+                      required: "Address is required",
+                    })}
+                    rows="2"
+                    className="flex-1 text-sm outline-none resize-none"
+                  />
+                </div>
+                {errors.address && (
+                  <p className="text-red-500 text-sm">
+                    {errors.address.message}
+                  </p>
+                )}
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  className=" btn bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 rounded-lg shadow-md transition-all duration-200 hover:shadow-lg"
+                >
+                  Place Order
+                </button>
+              </form>
+            </Typography>
+          </Box>
+        </Modal>
       </div>
     </div>
   );

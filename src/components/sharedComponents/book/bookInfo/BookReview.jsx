@@ -1,24 +1,22 @@
 import React from "react";
 
- const StarIcon = ({ filled }) => (
-    <svg
-      className="w-5 h-5 sm:w-6 sm:h-6"
-      fill={filled ? "#FF8A00" : "none"}
-      stroke={filled ? "#FF8A00" : "#D1D5DB"}
-      strokeWidth="1.5"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
-      />
-    </svg>
-  );
+const StarIcon = ({ filled }) => (
+  <svg
+    className="w-5 h-5 sm:w-6 sm:h-6"
+    fill={filled ? "#FF8A00" : "none"}
+    stroke={filled ? "#FF8A00" : "#D1D5DB"}
+    strokeWidth="1.5"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+    />
+  </svg>
+);
 
-
-const BookReview = () => {
- 
+const BookReview = ({ order }) => {
   return (
     <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 bg-white">
       <div>
@@ -49,8 +47,8 @@ const BookReview = () => {
             </div>
             <p className="mt-3 text-sm sm:text-base text-gray-700 leading-relaxed">
               Neque porro est qui dolorem ipsum quia quaed inventor veritatis et
-              quasi architecto var sed efficitur turpis gilla sed sit amet finibus
-              eros. Lorem Ipsum is simply dummy
+              quasi architecto var sed efficitur turpis gilla sed sit amet
+              finibus eros. Lorem Ipsum is simply dummy
             </p>
           </div>
         </div>
@@ -128,7 +126,10 @@ const BookReview = () => {
           </div>
 
           {/* Submit Button */}
-          <button className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-medium px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base rounded-full transition-colors">
+          <button
+            disabled={!order}
+            className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-medium px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base rounded-full transition-colors disabled:bg-gray-400 disabled:text-gray-200 disabled:cursor-not-allowed"
+          >
             Submit Now
           </button>
         </div>

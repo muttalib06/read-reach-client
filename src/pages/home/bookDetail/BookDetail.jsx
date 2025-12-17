@@ -4,7 +4,6 @@ import { FaHeart } from "react-icons/fa6";
 import { useNavigate, useParams } from "react-router";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Spinner from "../../../components/sharedComponents/spinner/Spinner";
-import ServerError from "../../../components/sharedComponents/Error/ServerError";
 import BookDetailTap from "../../../components/sharedComponents/book/BookDetailTap";
 import { Box, Modal, Typography } from "@mui/material";
 import { ShoppingCart } from "lucide-react";
@@ -74,6 +73,21 @@ const BookDetail = () => {
     },
   });
 
+  // get order of this book and user;
+
+  const { data: order = undefined, refetch } = useQuery({
+    queryKey: ["order", user.email],
+    enabled: !!user?.email && !!book?._id,
+    queryFn: async () => {
+      const res = await axiosSecure.get(
+        `/orderByIdAndEmail?email=${user.email}&bookId=${book._id}`
+      );
+
+      return res.data;
+    },
+  });
+
+  console.log(order);
   // fetch user from the mongodb fo this user's email;
 
   const { data: role } = useQuery({
@@ -115,6 +129,7 @@ const BookDetail = () => {
       const res = await axiosSecure.post("/order", orderInfo);
       if (res.data.insertedId) {
         reset();
+        refetch();
         handleOrderClose();
         Swal.fire({
           title: "Order submitted successfully",
@@ -265,7 +280,7 @@ const BookDetail = () => {
                 Read A Little
               </button>
 
-              {/* Add To Cart Button */}
+              {/* order button*/}
               <button
                 disabled={book.status === "available" ? false : true}
                 onClick={handleOrderOpen}
@@ -375,7 +390,7 @@ const BookDetail = () => {
 
       {/* Tap menu */}
       <div className="mt-12 sm:mt-16 lg:mt-20">
-        <BookDetailTap book={book}></BookDetailTap>
+        <BookDetailTap book={book} order={order}></BookDetailTap>
       </div>
 
       {/* book modal*/}

@@ -3,7 +3,7 @@ import BookDes from "./bookInfo/BookDes";
 import BookAdditionalInfo from "./bookInfo/BookAdditionalInfo";
 import BookReview from "./bookInfo/BookReview";
 
-const BookDetailTap = ({ book }) => {
+const BookDetailTap = ({ book,order }) => {
   const [activeTap, setActiveTap] = useState(0);
   const [direction, setDirection] = useState(0);
 
@@ -24,7 +24,7 @@ const BookDetailTap = ({ book }) => {
     // Additional Information
     <BookAdditionalInfo book={book} key="additional" />,
     // Reviews
-    <BookReview book={book} key="reviews" />,
+    <BookReview order={order} book={book} key="reviews" />,
   ];
 
   return (
