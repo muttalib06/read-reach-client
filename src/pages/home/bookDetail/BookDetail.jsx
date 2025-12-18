@@ -87,7 +87,6 @@ const BookDetail = () => {
     },
   });
 
-  console.log(order);
   // fetch user from the mongodb fo this user's email;
 
   const { data: role } = useQuery({

@@ -13,7 +13,7 @@ const CoverageArea = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     const location = e.target.location.value.trim();
-    console.log(location);
+   
     const district = serviceArea.find((center) =>
       center.district.toLowerCase().includes(location.toLowerCase())
     );

@@ -75,7 +75,6 @@ const MYBook = () => {
   //   handle edit form submit
 
   const onSubmit = async (data) => {
-    console.log("Form Data:", data);
     // Handle form submission here
     setIsEditOpen(false);
     try {

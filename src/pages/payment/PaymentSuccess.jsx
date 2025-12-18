@@ -32,8 +32,6 @@ const PaymentSuccess = () => {
     }
   }, [axiosSecure, navigate, searchParams]);
 
-  console.log(sessionData);
-
   useEffect(() => {
     setTimeout(() => setAnimationComplete(true), 500);
   }, []);

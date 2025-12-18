@@ -86,7 +86,7 @@ const SignupPage = () => {
       const uploadImageUrl = `https://api.imgbb.com/1/upload?key=${key}`;
       const imageUploadRes = await axios.post(uploadImageUrl, formData);
       const imageUrl = imageUploadRes.data.data.url;
-      console.log(imageUrl);
+     
 
       // save user data to database;
       const userInfo = {

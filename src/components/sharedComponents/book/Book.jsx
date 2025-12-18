@@ -3,7 +3,7 @@ import { CiStar } from "react-icons/ci";
 import { NavLink } from "react-router";
 
 const Book = ({ book }) => {
-  console.log(book);
+
   return (
     <div className="p-4 bg-white rounded-lg shadow-sm flex flex-col h-full">
       {/* Book Cover Image - Compact */}

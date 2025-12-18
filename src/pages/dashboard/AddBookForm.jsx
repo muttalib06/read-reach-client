@@ -40,7 +40,7 @@ const AddBookForm = () => {
       lateFeePerDay: Number(data.lateFeePerDay),
       librarian_email: user.email,
     };
-    console.log(formattedData);
+  
     // Handle form submission here
     try {
       const res = await axiosSecure.post("/add-book", formattedData);

@@ -31,8 +31,6 @@ const LibrarianDashboardHome = () => {
     },
   });
 
-  console.log(orders)
-
   //   total paid orders
   const paidOrders = orders.filter((order) => order.payment === "paid");
   // total unpaid orders
