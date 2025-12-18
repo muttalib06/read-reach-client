@@ -1,16 +1,26 @@
-# React + Vite
+## Project overview
+Using react, tailwindcss and other technologies for client and node.js,express.js and mongodb for server side, I have built a web application which delivers the book from the nearest library to the reader's  home. It's like a book deliver system application. My project name is "ReadReach".
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Purpose of this application;
+ReadReach save the time of many readers. Readers can easily read book from their nearest library by using this application. As well as reader can  choose their expected book that he/she want to read by browsing the all book page.It allows the readers to read the books without going to the library.
 
-Currently, two official plugins are available:
+## Project live URL;
+This is my project live URL:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Key features of this application;
+#key feature for all users
 
-## React Compiler
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1.I have implemented the authentication system using firebase to get valid users;
 
-## Expanding the ESLint configuration
+2.Using reactLeaflet, I have implemented the map where user can see their location and where we are providing our services.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+3.When user will click the view detail button of book card he/she will be navigated to the book detail page where user can see the all detail of this books and order the book by completing the order form.
+
+
+4.I have also implemented a book ordering system where user can order their favorite books.
+5.When user order book then this order data will be saved to the database and user can see their order data by navigating the my orders page.
+*Here I have implemented payment system using stripe prebuilt checkout so that  user can pay for their order.If his/her payment is successful, he/she redirects the payment successful page and save their payment history to the database.And user can see their payment history navigating the payment history page.
+
+
