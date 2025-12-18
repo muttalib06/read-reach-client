@@ -26,7 +26,7 @@ const Home = () => {
       <WhyChooseUs></WhyChooseUs>
 
       {/* stats section */}
-      <Stats>d</Stats>
+      <Stats></Stats>
 
       {/* How it Works */}
       <HowItWorks></HowItWorks>

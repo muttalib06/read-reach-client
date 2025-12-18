@@ -3,9 +3,11 @@ import { NavLink } from "react-router";
 import NavbarDropdown from "./NavbarDropdown";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
+import useTheme from "../../../hooks/useTheme";
 
 const Navbar = () => {
   const { user, logOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   // handle sign out;
 
@@ -114,9 +116,11 @@ const Navbar = () => {
         <div>
           <label className="toggle text-base-content">
             <input
+              onChange={toggleTheme}
               type="checkbox"
               value="synthwave"
               className="theme-controller"
+              checked={theme === "dark"}
             />
 
             <svg

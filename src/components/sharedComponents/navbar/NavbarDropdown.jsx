@@ -15,9 +15,11 @@ import { MdOutlineDashboard } from "react-icons/md";
 import { FiUserPlus } from "react-icons/fi";
 import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
 import useAuth from "../../../hooks/useAuth";
+import useTheme from "../../../hooks/useTheme";
 
 const NavbarDropdown = ({ handleSignOut }) => {
   const { user } = useAuth();
+  const {theme,toggleTheme} = useTheme()
   const [open, setOpen] = useState(false);
 
   return (
@@ -51,9 +53,11 @@ const NavbarDropdown = ({ handleSignOut }) => {
             <div>
               <label className="toggle text-base-content">
                 <input
+                  onChange={toggleTheme}
                   type="checkbox"
                   value="synthwave"
                   className="theme-controller"
+                  checked={theme === "dark"}
                 />
 
                 <svg
