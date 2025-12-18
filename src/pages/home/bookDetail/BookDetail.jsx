@@ -73,20 +73,6 @@ const BookDetail = () => {
     },
   });
 
-  // get order of this book and user;
-
-  const { data: order = undefined, refetch } = useQuery({
-    queryKey: ["order", user.email],
-    enabled: !!user?.email && !!book?._id,
-    queryFn: async () => {
-      const res = await axiosSecure.get(
-        `/orderByIdAndEmail?email=${user.email}&bookId=${book._id}`
-      );
-
-      return res.data;
-    },
-  });
-
   // fetch user from the mongodb fo this user's email;
 
   const { data: role } = useQuery({
@@ -94,6 +80,19 @@ const BookDetail = () => {
     queryFn: async () => {
       const res = await axiosSecure.get(`/user?email=${user.email}`);
       return res.data.role;
+    },
+  });
+
+  // get order of this book and user;
+
+  const { data: order = undefined, refetch } = useQuery({
+    queryKey: ["order", user.email],
+    enabled: role === "user" && !!user?.email && !!book?._id,
+    queryFn: async () => {
+      const res = await axiosSecure.get(
+        `/orderByIdAndEmail?email=${user.email}&bookId=${book._id}`
+      );
+      return res.data;
     },
   });
 
