@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 
 // create axios instance
 const instance = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "https://read-reach-server.onrender.com",
 });
 const useAxiosSecure = () => {
   const { user, logOut } = useAuth();
