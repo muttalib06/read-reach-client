@@ -27,6 +27,9 @@ import RoleRoute from "./RoleRoute";
 import WishlistPage from "../pages/dashboard/WishlistPage";
 import AboutUs from "../pages/aboutUs/AboutUs";
 import Blogs from "../pages/blogs/Blogs";
+import TermsOfService from "../pages/termOfService/TermsOfService";
+import PrivacyPolicy from "../pages/privacyPolicy/PrivacyPolicy";
+import CookieSettings from "../pages/cookiesSettings/CookiesSettings";
 
 export const router = createBrowserRouter([
   {
@@ -51,14 +54,12 @@ export const router = createBrowserRouter([
         element: <SignupPage></SignupPage>,
       },
       {
-        path:"aboutUs",
-        element:<AboutUs></AboutUs>
-
+        path: "aboutUs",
+        element: <AboutUs></AboutUs>,
       },
       {
-        path:"blogs",
-        element:<Blogs></Blogs>
-
+        path: "blogs",
+        element: <Blogs></Blogs>,
       },
       {
         path: "book-detail/:id",
@@ -68,8 +69,23 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+
+      {
+        path: "terms-services",
+        element: <TermsOfService></TermsOfService>,
+      },
+      {
+        path:"privacy-policy",
+        element:<PrivacyPolicy></PrivacyPolicy>
+      },
+      {
+        path:"cookies-settings",
+        element:<CookieSettings></CookieSettings>
+      }
     ],
   },
+
+
 
   // server error page
 

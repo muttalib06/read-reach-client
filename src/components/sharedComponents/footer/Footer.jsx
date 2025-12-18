@@ -117,28 +117,28 @@ const Footer = () => {
               </h3>
               <ul className="space-y-2 md:space-y-3">
                 <li>
-                  <a
-                    href="#"
+                  <NavLink
+                    to="/terms-services"
                     className="text-slate-700 hover:text-primary transition-colors duration-200 text-sm md:text-base inline-block"
                   >
                     Terms of Service
-                  </a>
+                  </NavLink>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <NavLink
+                    to="/privacy-policy"
                     className="text-slate-700 hover:text-primary transition-colors duration-200 text-sm md:text-base inline-block"
                   >
                     Privacy Policy
-                  </a>
+                  </NavLink>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <NavLink
+                    to="/cookies-settings"
                     className="text-slate-700 hover:text-primary transition-colors duration-200 text-sm md:text-base inline-block"
                   >
                     Cookies Settings
-                  </a>
+                  </NavLink>
                 </li>
               </ul>
             </div>
@@ -187,28 +187,28 @@ const Footer = () => {
               {/* Social Links - Desktop */}
               <div className="hidden sm:flex items-center gap-4">
                 <a
-                  href="#"
+                  href="https://web.facebook.com/?_rdc=1&_rdr#"
                   className="text-slate-700 hover:text-primary transition-colors duration-200 p-2 hover:bg-white rounded-full"
                   aria-label="Facebook"
                 >
                   <FaFacebookF size={18} />
                 </a>
                 <a
-                  href="#"
+                  href="https://x.com/"
                   className="text-slate-700 hover:text-primary transition-colors duration-200 p-2 hover:bg-white rounded-full"
                   aria-label="Twitter"
                 >
                   <FaXTwitter size={18} />
                 </a>
                 <a
-                  href="#"
+                  href="https://www.instagram.com/accounts/login/?hl=en"
                   className="text-slate-700 hover:text-primary transition-colors duration-200 p-2 hover:bg-white rounded-full"
                   aria-label="Instagram"
                 >
                   <FaInstagram size={18} />
                 </a>
                 <a
-                  href="#"
+                  href="https://www.linkedin.com/feed/"
                   className="text-slate-700 hover:text-primary transition-colors duration-200 p-2 hover:bg-white rounded-full"
                   aria-label="LinkedIn"
                 >
