@@ -26,6 +26,10 @@ const DashboardLayout = () => {
     }
   }, [navigate, role, location.pathname, isLoading]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   if (loading || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BookOpen,
   Upload,
@@ -60,6 +60,10 @@ const AddBookForm = () => {
       });
     }
   };
+
+   useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">

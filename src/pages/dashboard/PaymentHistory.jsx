@@ -29,6 +29,10 @@ const PaymentHistory = () => {
     }
   }, [navigate, error]);
 
+     useEffect(() => {
+    window.scrollTo(0,0);
+  },[])
+
   if (isLoading) {
     return <Spinner></Spinner>;
   }

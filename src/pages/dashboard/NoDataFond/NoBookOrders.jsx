@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Package } from "lucide-react";
 
 const NoBookOrders = () => {
+
+    useEffect(() => {
+      window.scrollTo(0,0);
+    },[])
   return (
     <div className="flex items-center justify-center min-h-[400px] p-8">
       <div className="text-center max-w-md">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Search, ChevronDown, Shield, UserCog } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -74,6 +74,10 @@ const UserManagementTable = () => {
         return "bg-gray-100 text-gray-700 border-gray-200";
     }
   };
+
+     useEffect(() => {
+    window.scrollTo(0,0);
+  },[])
 
   if (isLoading) {
     return <Spinner></Spinner>;

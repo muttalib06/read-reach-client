@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Book,
   Package,
@@ -61,6 +61,10 @@ const LibrarianDashboardHome = () => {
     unpublishedBooks: unpublishedBooks.length,
     totalOrders: orders.length,
   };
+
+    useEffect(() => {
+      window.scrollTo(0,0);
+    },[])
 
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 via-gray-50 to-orange-50/30">

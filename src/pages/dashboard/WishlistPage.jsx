@@ -14,7 +14,7 @@ import Spinner from "../../components/sharedComponents/spinner/Spinner";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
 import { Box, Modal, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaEnvelope, FaMapMarked, FaPhone, FaUser } from "react-icons/fa";
 
 const style = {
@@ -161,6 +161,10 @@ const WishlistPage = () => {
       });
     }
   };
+
+     useEffect(() => {
+    window.scrollTo(0,0);
+  },[])
 
   if (isLoading) {
     return <Spinner></Spinner>;

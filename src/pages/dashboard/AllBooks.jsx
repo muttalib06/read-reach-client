@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Search, Trash2, Eye, EyeOff } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -97,6 +97,10 @@ const AllBooks = () => {
   if (isLoading) {
     return <Spinner></Spinner>;
   }
+
+    useEffect(() => {
+      window.scrollTo(0,0);
+    },[])
 
   return (
     <div className="min-h-screen bg-linear-to-br from-orange-50 to-gray-50 p-4 md:p-6 lg:p-8">

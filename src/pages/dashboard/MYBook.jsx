@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { X, Edit, EyeOff, Eye } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -100,11 +100,15 @@ const MYBook = () => {
     }
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   if (isLoading) {
     return <Spinner></Spinner>;
   }
-  if(books.length === 0){
-    return<NoBooksFound></NoBooksFound>
+  if (books.length === 0) {
+    return <NoBooksFound></NoBooksFound>;
   }
 
   if (isEditOpen) {

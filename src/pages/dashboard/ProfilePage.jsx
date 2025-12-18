@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Mail,
   Phone,
@@ -133,6 +133,10 @@ const ProfilePage = () => {
     setImagePreview(user.photoURL);
     setIsEditing(false);
   };
+
+     useEffect(() => {
+    window.scrollTo(0,0);
+  },[])
 
   if (isLoading) {
     return <Spinner></Spinner>;

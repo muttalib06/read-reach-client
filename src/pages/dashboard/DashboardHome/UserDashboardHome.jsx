@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Package,
   Clock,
@@ -97,54 +97,7 @@ const UserDashboard = () => {
     },
   ];
 
-  // Sample data for recent orders
-  //   const recentOrders = [
-  //     {
-  //       id: "#ORD-1024",
-  //       bookName: "The Great Gatsby",
-  //       author: "F. Scott Fitzgerald",
-  //       status: "Delivered",
-  //       payment: "Paid",
-  //       orderDate: "Dec 10, 2024",
-  //       amount: "$12.99",
-  //     },
-  //     {
-  //       id: "#ORD-1023",
-  //       bookName: "To Kill a Mockingbird",
-  //       author: "Harper Lee",
-  //       status: "Shipped",
-  //       payment: "Paid",
-  //       orderDate: "Dec 12, 2024",
-  //       amount: "$14.50",
-  //     },
-  //     {
-  //       id: "#ORD-1022",
-  //       bookName: "1984",
-  //       author: "George Orwell",
-  //       status: "Pending",
-  //       payment: "Paid",
-  //       orderDate: "Dec 13, 2024",
-  //       amount: "$11.99",
-  //     },
-  //     {
-  //       id: "#ORD-1021",
-  //       bookName: "Pride and Prejudice",
-  //       author: "Jane Austen",
-  //       status: "Delivered",
-  //       payment: "Paid",
-  //       orderDate: "Dec 08, 2024",
-  //       amount: "$13.25",
-  //     },
-  //     {
-  //       id: "#ORD-1020",
-  //       bookName: "The Catcher in the Rye",
-  //       author: "J.D. Salinger",
-  //       status: "Cancelled",
-  //       payment: "Refunded",
-  //       orderDate: "Dec 11, 2024",
-  //       amount: "$15.00",
-  //     },
-  //   ];
+
 
   // Data for pie chart with brand colors
   const chartData = [
@@ -154,16 +107,7 @@ const UserDashboard = () => {
     { name: "Delivered", value: deliveredOrders.length, color: "#34d399" },
   ];
 
-  //   // Bar chart data for monthly overview
-  //   const monthlyData = [
-  //     { month: "Aug", orders: 15 },
-  //     { month: "Sep", orders: 18 },
-  //     { month: "Oct", orders: 22 },
-  //     { month: "Nov", orders: 20 },
-  //     { month: "Dec", orders: 24 },
-  //   ];
-
-  // Quick actions
+//  quick actions
   const quickActions = [
     {
       title: "Browse Books",
@@ -211,6 +155,10 @@ const UserDashboard = () => {
       ? "text-emerald-700 bg-emerald-50 border border-emerald-200"
       : "text-rose-700 bg-rose-50 border border-rose-200";
   };
+
+    useEffect(() => {
+      window.scrollTo(0,0);
+    },[])
 
   return (
     <div className="min-h-screen bg-gray-50">

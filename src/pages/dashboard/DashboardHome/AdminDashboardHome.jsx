@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Users,
   BookOpen,
@@ -184,6 +184,10 @@ const AdminDashboardHome = () => {
       description: "Execute mass updates or deletions",
     },
   ];
+
+  useEffect(() => {
+    window.scrollTo(0,0);
+  },[])
 
   return (
     <div className="min-h-screen bg-gray-50">

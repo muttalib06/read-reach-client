@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Package, Clock, Truck, CheckCircle, XCircle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -26,6 +26,10 @@ const LibrarianOrders = () => {
       return res.data;
     },
   });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // status option
 
