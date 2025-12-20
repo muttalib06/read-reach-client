@@ -1,7 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import Swal from "sweetalert2";
+
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
+  iconUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+  shadowUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+});
 
 const CoverageArea = () => {
   const [serviceArea, setServiceArea] = useState([]);
@@ -13,7 +24,7 @@ const CoverageArea = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     const location = e.target.location.value.trim();
-   
+
     const district = serviceArea.find((center) =>
       center.district.toLowerCase().includes(location.toLowerCase())
     );
