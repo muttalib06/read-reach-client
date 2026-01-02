@@ -18,7 +18,7 @@ Traditional library visits require significant time investment—traveling to th
 
 ## 🌐 Live Application
 
-**🔗 Production URL:** [View Live Demo](https://read-reach-client.pages.dev/)
+**🔗 Production URL:** [View Live Demo](https://read-reach-client.vercel.app/)
 
 Experience the full functionality of ReadReach with our deployed application.
 
