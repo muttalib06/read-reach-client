@@ -63,11 +63,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "book-detail/:id",
-        element: (
-          <PrivateRoute>
-            <BookDetail></BookDetail>
-          </PrivateRoute>
-        ),
+        element: <BookDetail></BookDetail>,
       },
 
       {
@@ -75,17 +71,15 @@ export const router = createBrowserRouter([
         element: <TermsOfService></TermsOfService>,
       },
       {
-        path:"privacy-policy",
-        element:<PrivacyPolicy></PrivacyPolicy>
+        path: "privacy-policy",
+        element: <PrivacyPolicy></PrivacyPolicy>,
       },
       {
-        path:"cookies-settings",
-        element:<CookieSettings></CookieSettings>
-      }
+        path: "cookies-settings",
+        element: <CookieSettings></CookieSettings>,
+      },
     ],
   },
-
-
 
   // server error page
 
