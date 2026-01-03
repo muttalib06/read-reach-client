@@ -195,9 +195,14 @@ const LoginPage = () => {
                   <h2 className="text-2xl lg:text-3xl font-serif text-gray-900 mb-1">
                     Welcome Back
                   </h2>
-                  <p className="text-gray-500 text-xs lg:text-sm">
-                    Enter your email and password to access your account
-                  </p>
+                  <div className="text-gray-500 text-xs lg:text-sm">
+                    <p> Enter your email and password to access your account</p>
+                    <div>
+                      <p className="text-black"> Admin credential</p>
+                      <p> admin:muttalib309@gmail.com </p>
+                      <p> password: 123456Aa!</p>
+                    </div>
+                  </div>
                 </div>
 
                 <form onSubmit={handleSubmit(formSubmit)}>
